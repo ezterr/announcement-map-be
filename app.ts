@@ -1,12 +1,20 @@
-import express, { json } from 'express';
+import express, { json, urlencoded } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { handleErrors } from './middleware/handle-errors';
+import { router } from './routes';
+import { passportConfig } from './services/passport/passport-config';
+
+passportConfig();
 
 const app = express();
 
 app.use(json());
+app.use(urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cors({ origin: 'http://localhost:3000' }));
 
+app.use('/api', router);
 app.use(handleErrors);
 
 app.listen(3001, 'localhost', () => {
