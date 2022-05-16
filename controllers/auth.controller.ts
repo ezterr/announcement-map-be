@@ -27,7 +27,6 @@ export class AuthController {
         throw new ValidationError(
           'Email must be uniqueness',
           'Email must be uniqueness',
-          400,
         );
       }
 
@@ -35,7 +34,6 @@ export class AuthController {
         throw new ValidationError(
           'Username must be uniqueness',
           'Username must be uniqueness',
-          400,
         );
       }
 
@@ -43,7 +41,6 @@ export class AuthController {
         throw new ValidationError(
           'password must contain eight characters, at least one letter and one number',
           'password must contain eight characters, at least one letter and one number',
-          400,
         );
       }
 

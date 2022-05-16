@@ -10,21 +10,13 @@ export class PassportStrategy {
       const result = await UserRepository.findOneByUsername(username);
 
       if (!result) {
-        throw new AuthError(
-          'Incorrect username or password.',
-          'Incorrect username or password.',
-          401,
-        );
+        throw new AuthError('Incorrect username or password.', 'Incorrect username or password.');
       }
 
       const passwordCompare = await compare(password, result.password as string);
 
       if (!passwordCompare) {
-        throw new AuthError(
-          'Incorrect username or password.',
-          'Incorrect username or password.',
-          401,
-        );
+        throw new AuthError('Incorrect username or password.', 'Incorrect username or password.');
       }
 
       return cb(null, result);
@@ -46,12 +38,12 @@ export class PassportStrategy {
       const result = await UserRepository.findOneById(payload.id);
 
       if (!result) {
-        throw new AuthError('Unauthorized', 'Unauthorized', 401);
+        throw new AuthError('Unauthorized', 'Unauthorized');
       }
 
       if (result.jwtControlKey === payload.key) return cb(null, result);
 
-      throw new AuthError('Unauthorized', 'Unauthorized', 401);
+      throw new AuthError('Unauthorized', 'Unauthorized');
     } catch (err) {
       return cb(err, null, err);
     }
