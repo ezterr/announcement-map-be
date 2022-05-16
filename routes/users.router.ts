@@ -5,9 +5,9 @@ import { UserController } from '../controllers/user.controller';
 export const usersRouter = Router();
 
 usersRouter
-  .get('/', checkUserRoutesAccess, UserController.getAllUsers); // all
+  .get('/', checkUserRoutesAccess, UserController.getAllUsers);
 
 usersRouter.route('/:userId')
-  .get(checkUserRoutesAccess, UserController.getUserById) // get by id
-  .patch(checkUserRoutesAccess, UserController.updateUserById) // update by id
-  .delete(checkUserRoutesAccess); // remove by id
+  .get(checkUserRoutesAccess, UserController.getUserById)
+  .patch(checkUserRoutesAccess, UserController.updateUserById)
+  .delete(checkUserRoutesAccess, UserController.deleteUserById);

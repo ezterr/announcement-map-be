@@ -86,41 +86,14 @@ export class UserController {
     }
   }
 
-  // public static async editUserById(req: Request, res: Response, next: NextFunction) {
-  //   const {
-  //     firstName, lastName, password: reqPassword, avatar,
-  //   } = req.body as UserUpdateDataReq;
-  //
-  //   try {
-  //     const user = await UserRepository.findOneById(req.params.userId);
-  //     if (user === null) throw new NotFoundError('Not Found');
-  //
-  //     if (reqPassword) {
-  //       if (UserValidation.validatePassword(reqPassword)) user.password = await hash(reqPassword as string, 12);
-  //       else {
-  //         throw new ValidationError(
-  //           'password must contain eight characters, at least one letter and one number',
-  //           'password must contain eight characters, at least one letter and one number',
-  //           400,
-  //         );
-  //       }
-  //     }
-  //
-  //     user.firstName = firstName || user.firstName;
-  //     user.lastName = lastName || user.lastName;
-  //     user.avatar = avatar || user.avatar;
-  //     user.validateAllData();
-  //
-  //     const dbResult = await UserRepository.update(user);
-  //     if (dbResult === null) throw new Error('User has not been updated.');
-  //
-  //     const { password, jwtControlKey, ...saveDataForRes } = dbResult;
-  //     const userForRes: UserForResRecord = new UserRecord(saveDataForRes);
-  //     userForRes.validateForRes();
-  //
-  //     res.json(saveDataForRes);
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // }
+  public static async deleteUserById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const removedUserId = await UserRepository.deleteById(req.params.userId);
+      if (!removedUserId) throw new ValidationError('Invalid user id');
+
+      res.send({ removedUserId });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
