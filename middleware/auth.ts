@@ -38,6 +38,7 @@ export const checkRefreshToken = (req: Request, res: Response, next: NextFunctio
 * */
 export function checkUserRoutesAccess(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log(req.user);
     if ((req.user as ReqUser).role === UserRole.Admin) {
       next();
       return;

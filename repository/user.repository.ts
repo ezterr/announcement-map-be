@@ -63,8 +63,10 @@ export class UserRepository {
     return result.changedRows > 0 ? user : null;
   }
 
-  public static deleteById(id: string) {
+  public static async deleteById(id: string): Promise<string | null> {
+    const [result] = await pool.execute('DELETE FROM `users` WHERE `id`=:id', { id }) as ResultSetHeader[];
 
+    return result.affectedRows > 0 ? id : null;
   }
 
   // validation
