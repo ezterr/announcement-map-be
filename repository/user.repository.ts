@@ -10,7 +10,7 @@ type DbUserData = [UserData[], FieldPacket[]];
 export class UserRepository {
   public static async insert(user: UserRecord): Promise<UserRecord | null> {
     const [result] = await pool.execute(
-      'INSERT INTO `users` VALUES(:id, :firstName, :lastName, :email, :username, :password, :jwtControlKey, :avatar, :role);',
+      'INSERT INTO `users` VALUES(:id, :firstName, :lastName, :username, :email, :password, :jwtControlKey, :avatar, :role);',
       user,
     ) as ResultSetHeader[];
 
@@ -73,7 +73,7 @@ export class UserRepository {
       'SELECT `email` FROM `users` WHERE `email`=:email;',
       { email },
     ) as DbEmailCheckResult;
-
+    console.log(result, email);
     return !(result.length);
   }
 
