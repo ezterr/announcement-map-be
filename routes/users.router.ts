@@ -9,5 +9,5 @@ usersRouter
 
 usersRouter.route('/:userId')
   .get(checkUserRoutesAccess, UserController.getUserById) // get by id
-  .patch(checkUserRoutesAccess) // update by id
+  .patch(checkUserRoutesAccess, UserController.updateUserById) // update by id
   .delete(checkUserRoutesAccess); // remove by id

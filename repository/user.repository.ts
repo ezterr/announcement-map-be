@@ -60,7 +60,7 @@ export class UserRepository {
       user,
     ) as OkPacket[];
 
-    return result.changedRows > 0 ? user : null;
+    return result.affectedRows > 0 ? user : null;
   }
 
   public static async deleteById(id: string): Promise<string | null> {

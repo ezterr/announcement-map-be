@@ -47,14 +47,12 @@ export class UserRecord {
       throw new ValidationError(
         'first name must contain at least 4 characters',
         'first name must contain at least 4 characters',
-        400,
       );
     }
     if (!UserValidation.validateName(this.lastName)) {
       throw new ValidationError(
         'last name must contain at least 4 characters',
         'last name must contain at least 4 characters',
-        400,
       );
     }
 
@@ -62,7 +60,6 @@ export class UserRecord {
       throw new ValidationError(
         'Username must contain at least 4 characters',
         'Username must contain at least 4 characters',
-        400,
       );
     }
 
@@ -76,7 +73,6 @@ export class UserRecord {
       throw new ValidationError(
         'email must contain at least 4 characters and includes "@"',
         'email must contain at least 4 characters and includes "@"',
-        400,
       );
     }
 

@@ -10,8 +10,8 @@ export const authLogin = async (req: Request, res: Response, next: NextFunction)
 export const authJwt = async (req: Request, res: Response, next: NextFunction) => (
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     try {
-      if (err) throw new AuthError(err.message, err.userMessage, 401);
-      if (info) throw new AuthError(info.message, 'Unauthorized.', 401);
+      if (err) throw new AuthError(err.message, err.userMessage);
+      if (info) throw new AuthError(info.message, 'Unauthorized.');
       req.user = user;
       next();
     } catch (error) {
@@ -23,8 +23,8 @@ export const authJwt = async (req: Request, res: Response, next: NextFunction) =
 export const checkRefreshToken = (req: Request, res: Response, next: NextFunction) => (
   passport.authenticate('refreshJwt', { session: false }, (err, user, info) => {
     try {
-      if (err) throw new AuthError(err.message, err.userMessage, 401);
-      if (info) throw new AuthError(info.message, 'Unauthorized.', 401);
+      if (err) throw new AuthError(err.message, err.userMessage);
+      if (info) throw new AuthError(info.message, 'Unauthorized.');
       req.user = user;
       next();
     } catch (error) {
@@ -50,7 +50,7 @@ export function checkUserRoutesAccess(req: Request, res: Response, next: NextFun
       return;
     }
 
-    throw new AuthError('unauthorized', 'unauthorized', 403);
+    throw new AuthError('unauthorized', 'unauthorized');
   } catch (err) {
     next(err);
   }
