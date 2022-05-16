@@ -7,7 +7,7 @@ export const usersRouter = Router();
 usersRouter
   .get('/', checkUserRoutesAccess, UserController.getAllUsers); // all
 
-usersRouter.route('/:id')
-  .get(checkUserRoutesAccess) // get by id
+usersRouter.route('/:userId')
+  .get(checkUserRoutesAccess, UserController.getUserById) // get by id
   .patch(checkUserRoutesAccess) // update by id
   .delete(checkUserRoutesAccess); // remove by id
