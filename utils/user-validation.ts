@@ -6,15 +6,15 @@ export class UserValidation {
   }
 
   public static validateName(name: string | undefined): boolean {
-    return !!(name && name.trim().length > 3 && name.length <= 60);
+    return !!(name && name.trim().length >= 3 && name.length <= 60);
   }
 
   public static validateEmail(email: string | undefined) {
-    return !!(email && email.trim().length > 3 && email.length <= 255 && email.includes('@'));
+    return !!(email && email.trim().length >= 3 && email.length <= 255 && email.includes('@'));
   }
 
   public static validateUsername(username: string | undefined) {
-    return !!(username && username.trim().length > 3 && username.length <= 60);
+    return !!(username && username.trim().length >= 3 && username.length <= 60);
   }
 
   public static validatePassword(password: string) {

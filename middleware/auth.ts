@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { AuthError } from '../utils/errors';
+import { AuthError, ForbiddenError } from '../utils/errors';
 import { ReqUser, UserRole } from '../types';
 
 export const authLogin = async (req: Request, res: Response, next: NextFunction) => (
@@ -49,7 +49,7 @@ export function checkUserRoutesAccess(req: Request, res: Response, next: NextFun
       return;
     }
 
-    throw new AuthError('unauthorized', 'unauthorized', 403);
+    throw new ForbiddenError('forbidden');
   } catch (err) {
     next(err);
   }
