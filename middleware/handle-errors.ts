@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
+import {
+  AuthError, ForbiddenError, NotFoundError, ValidationError,
+} from '../utils/errors';
 
 export async function handleErrors(err: Error, req: Request, res: Response, next: NextFunction) {
-  if (err instanceof AuthError || err instanceof ValidationError || err instanceof NotFoundError) {
+  if (err instanceof AuthError || err instanceof ValidationError || err instanceof NotFoundError
+    || err instanceof ForbiddenError) {
     res
       .status(err.status)
       .json({ error: err.userMessage });
