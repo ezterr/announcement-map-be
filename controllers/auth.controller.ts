@@ -93,7 +93,7 @@ export class AuthController {
       }, JWT_SECRET_REFRESH);
 
     res.cookie('refreshJwt', refreshToken, {
-      httpOnly: false, maxAge: AUTH_REFRESH_TIME, secure: false,
+      httpOnly: true, maxAge: AUTH_REFRESH_TIME, secure: false,
     });
     res.json({ token });
   }
