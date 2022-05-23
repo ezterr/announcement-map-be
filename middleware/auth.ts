@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { AuthError } from '../utils/errors';
+import { log } from 'util';
+import { AuthError, ForbiddenError } from '../utils/errors';
 import { ReqUser, UserRole } from '../types';
 
 export const authLogin = async (req: Request, res: Response, next: NextFunction) => (
@@ -38,19 +39,17 @@ export const checkRefreshToken = (req: Request, res: Response, next: NextFunctio
 * */
 export function checkUserRoutesAccess(req: Request, res: Response, next: NextFunction) {
   try {
-    console.log(req.user);
     if ((req.user as ReqUser).role === UserRole.Admin) {
       next();
       return;
     }
 
     if ((req.user as ReqUser).id === req.params.userId) {
-      console.log('checkUserRoutesAccess');
       next();
       return;
     }
 
-    throw new AuthError('unauthorized', 'unauthorized');
+    throw new ForbiddenError('forbidden');
   } catch (err) {
     next(err);
   }

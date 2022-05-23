@@ -6,7 +6,9 @@ import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import { UserForResRecord, UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
-import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
+import {
+  AUTH_REFRESH_TIME, AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH,
+} from '../config/secret';
 import {
   RegisterUserDataReq, ReqUser, UserData, UserRole,
 } from '../types';
@@ -75,6 +77,11 @@ export class AuthController {
   static async signin(req: Request, res: Response) {
     const token = jwt.sign({
       id: (req.user as any).id,
+      firstName: (req.user as any).firstName,
+      lastName: (req.user as any).lastName,
+      username: (req.user as any).username,
+      email: (req.user as any).email,
+      avatar: (req.user as any).avatar,
       role: (req.user as any).role,
     }, JWT_SECRET, { expiresIn: AUTH_TIME });
 
@@ -85,13 +92,20 @@ export class AuthController {
         role: (req.user as any).role,
       }, JWT_SECRET_REFRESH);
 
-    res.cookie('refreshJwt', refreshToken);
+    res.cookie('refreshJwt', refreshToken, {
+      httpOnly: false, maxAge: AUTH_REFRESH_TIME, secure: false,
+    });
     res.json({ token });
   }
 
   static async getAccessToken(req: Request, res: Response) {
     const token = jwt.sign({
       id: (req.user as any).id,
+      firstName: (req.user as any).firstName,
+      lastName: (req.user as any).lastName,
+      username: (req.user as any).username,
+      email: (req.user as any).email,
+      avatar: (req.user as any).avatar,
       role: (req.user as any).role,
     }, JWT_SECRET, { expiresIn: AUTH_TIME });
 
