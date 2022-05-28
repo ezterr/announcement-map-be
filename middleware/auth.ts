@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { log } from 'util';
 import { AuthError, ForbiddenError } from '../utils/errors';
 import { ReqUser, UserRole } from '../types';
 
@@ -34,9 +33,6 @@ export const checkRefreshToken = (req: Request, res: Response, next: NextFunctio
   })(req, res, next)
 );
 
-/*
-* sprawdza czy id w params jest takie samo jak id w JWT
-* */
 export function checkUserRoutesAccess(req: Request, res: Response, next: NextFunction) {
   try {
     if ((req.user as ReqUser).role === UserRole.Admin) {

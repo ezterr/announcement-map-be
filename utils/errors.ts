@@ -20,22 +20,20 @@ export class ForbiddenError extends Error {
 }
 
 export class ValidationError extends Error {
-  public status: number = 400;
-
   constructor(
     public message: string,
     public userMessage: string = 'Bad Request',
+    public status = 400,
   ) {
     super(message);
   }
 }
 
 export class NotFoundError extends Error {
-  public status: number = 404;
-
   constructor(
     public message: string,
     public userMessage: string = 'Not Found',
+    public status = 404,
   ) {
     super(message);
   }

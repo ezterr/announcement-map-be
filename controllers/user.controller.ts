@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { hash, compare } from 'bcrypt';
-import { UserForResRecord, UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
 import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
 import { UserValidation } from '../utils/user-validation';
+import { UserEntityRes } from '../types';
 
 export class UserController {
   public static async getAllUsers(req: Request, res: Response, next: NextFunction) {
@@ -11,11 +11,9 @@ export class UserController {
     const count: number | undefined = Number(req.query?.count !== undefined ? req.query.count : 100);
 
     try {
-      const users = (await UserRepository.findAll(offset, count)).map((e): UserForResRecord => {
-        const { password, jwtControlKey, ...saveDataForRes } = e;
-        const user = new UserRecord(saveDataForRes);
-        user.validateForRes();
-        return user;
+      const users = (await UserRepository.findAll(offset, count)).map((e): UserEntityRes => {
+        const { password, jwtControlKey, ...userEntityRes } = e;
+        return userEntityRes;
       });
 
       res.json(users);
@@ -30,11 +28,9 @@ export class UserController {
 
       if (user === null) throw new NotFoundError('Not Found');
 
-      const { password, jwtControlKey, ...saveDataForRes } = user;
-      const userForRes: UserForResRecord = new UserRecord(saveDataForRes);
-      userForRes.validateForRes();
+      const { password, jwtControlKey, ...userEntityRes } = user;
 
-      res.json(userForRes);
+      res.json(userEntityRes);
     } catch (err) {
       next(err);
     }
@@ -53,8 +49,9 @@ export class UserController {
       user.lastName = lastName || user.lastName;
       user.avatar = avatar || user.avatar;
 
-      if (!!newPassword || !!email) {
+      if (newPassword || email !== user.email) {
         const passwordCompareResult = password ? await compare(password, user.password as string) : false;
+
         if (passwordCompareResult) {
           user.email = email || user.email;
 
@@ -73,11 +70,12 @@ export class UserController {
         }
       }
 
+      user.validateAllData();
       const result = await UserRepository.update(user);
 
       if (result) {
-        const { password: hashPassword, jwtControlKey, ...userDataForReq } = user;
-        res.json(userDataForReq);
+        const { password: hashPassword, jwtControlKey, ...userEntityRes } = user;
+        res.json(userEntityRes);
       } else {
         throw new Error('Internal server error');
       }

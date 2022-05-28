@@ -6,7 +6,7 @@ export const authRouter = Router();
 
 authRouter
   .post('/signup', AuthController.signup)
-  .post('/signin', authLogin, AuthController.signin)
+  .post('/signin', authLogin, AuthController.signIn)
   .get('/token', checkRefreshToken, AuthController.getAccessToken)
   .delete('/logout', AuthController.logout)
   .delete('/logout/all', authJwt, AuthController.logoutAll);

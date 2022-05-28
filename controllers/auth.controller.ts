@@ -4,11 +4,9 @@ import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
-import { UserForResRecord, UserRecord } from '../records/user.record';
+import { UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
-import {
-  AUTH_REFRESH_TIME, AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH,
-} from '../config/secret';
+import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
 import {
   RegisterUserDataReq, ReqUser, UserData, UserRole,
 } from '../types';
@@ -27,22 +25,22 @@ export class AuthController {
 
       if (!isEmailUniqueness) {
         throw new ValidationError(
-          'Email must be uniqueness',
-          'Email must be uniqueness',
+          'Email must be uniqueness.',
+          'Email must be uniqueness.',
         );
       }
 
       if (!isUsernameUniqueness) {
         throw new ValidationError(
-          'Username must be uniqueness',
-          'Username must be uniqueness',
+          'Username must be uniqueness.',
+          'Username must be uniqueness.',
         );
       }
 
       if (!UserValidation.validatePassword(password)) {
         throw new ValidationError(
-          'password must contain eight characters, at least one letter and one number',
-          'password must contain eight characters, at least one letter and one number',
+          'Password must contain eight characters, at least one letter and one number.',
+          'Password must contain eight characters, at least one letter and one number.',
         );
       }
 
@@ -65,48 +63,35 @@ export class AuthController {
       const dbResult = await UserRepository.insert(user);
       if (dbResult === null) throw new Error('User has not been created.');
 
-      const { password: resPassword, jwtControlKey: resJwtControlKey, ...saveDataForRes } = dbResult;
-      const userForRes: UserForResRecord = new UserRecord(saveDataForRes);
+      const { password: resPassword, jwtControlKey: resJwtControlKey, ...userEntityRes } = dbResult;
 
-      res.status(201).json(userForRes);
+      res.status(201).json(userEntityRes);
     } catch (err) {
       next(err);
     }
   }
 
-  static async signin(req: Request, res: Response) {
+  static async signIn(req: Request, res: Response) {
     const token = jwt.sign({
-      id: (req.user as any).id,
-      firstName: (req.user as any).firstName,
-      lastName: (req.user as any).lastName,
-      username: (req.user as any).username,
-      email: (req.user as any).email,
-      avatar: (req.user as any).avatar,
-      role: (req.user as any).role,
+      id: (req.user as UserRecord).id,
+      role: (req.user as UserRecord).role,
     }, JWT_SECRET, { expiresIn: AUTH_TIME });
 
     const refreshToken = jwt
       .sign({
-        id: (req.user as any).id,
-        key: (req.user as any).jwtControlKey,
-        role: (req.user as any).role,
+        id: (req.user as UserRecord).id,
+        key: (req.user as UserRecord).jwtControlKey,
+        role: (req.user as UserRecord).role,
       }, JWT_SECRET_REFRESH);
 
-    res.cookie('refreshJwt', refreshToken, {
-      httpOnly: false, maxAge: AUTH_REFRESH_TIME, secure: false,
-    });
+    res.cookie('refreshJwt', refreshToken, { httpOnly: true, secure: false });
     res.json({ token });
   }
 
   static async getAccessToken(req: Request, res: Response) {
     const token = jwt.sign({
-      id: (req.user as any).id,
-      firstName: (req.user as any).firstName,
-      lastName: (req.user as any).lastName,
-      username: (req.user as any).username,
-      email: (req.user as any).email,
-      avatar: (req.user as any).avatar,
-      role: (req.user as any).role,
+      id: (req.user as UserRecord).id,
+      role: (req.user as UserRecord).role,
     }, JWT_SECRET, { expiresIn: AUTH_TIME });
 
     res.json({ token });

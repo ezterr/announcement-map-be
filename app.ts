@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { handleErrors } from './middleware/handle-errors';
 import { router } from './routes';
-import { passportConfig } from './services/passport/passport-config';
+import { passportConfig } from './utils/passport/passport-config';
 
 const app = express();
 
