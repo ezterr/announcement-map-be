@@ -3,7 +3,7 @@ import { hash, compare } from 'bcrypt';
 import { UserRepository } from '../repository/user.repository';
 import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
 import { UserValidation } from '../utils/user-validation';
-import { UserEntityRes } from '../types';
+import { UserEntityRes, UserUpdateEntity } from '../types';
 
 export class UserController {
   public static async getAllUsers(req: Request, res: Response, next: NextFunction) {
@@ -39,7 +39,7 @@ export class UserController {
   public static async updateUserById(req: Request, res: Response, next: NextFunction) {
     const {
       firstName, lastName, email, newPassword, password, avatar,
-    } = req.body;
+    } = req.body as UserUpdateEntity;
 
     try {
       const user = await UserRepository.findOneById(req.params.userId);

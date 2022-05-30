@@ -7,9 +7,7 @@ import { promisify } from 'util';
 import { UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
 import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
-import {
-  RegisterUserDataReq, ReqUser, UserData, UserRole,
-} from '../types';
+import { ReqUser, SignupUserEntity, UserRole } from '../types';
 import { NotFoundError, ValidationError } from '../utils/errors';
 import { UserValidation } from '../utils/user-validation';
 
@@ -17,7 +15,7 @@ export class AuthController {
   static async signup(req: Request, res: Response, next: NextFunction) {
     const {
       firstName, lastName, username, email, password, avatar,
-    } = req.body as RegisterUserDataReq;
+    } = req.body as SignupUserEntity;
 
     try {
       const isEmailUniqueness = await UserRepository.checkEmailUniqueness(email);
@@ -57,7 +55,7 @@ export class AuthController {
         password: hashPassword,
         jwtControlKey,
         role: UserRole.User,
-      } as UserData);
+      });
       user.validateAllData();
 
       const dbResult = await UserRepository.insert(user);

@@ -1,4 +1,4 @@
-import { UserRole, UserData, UserEntity } from '../types';
+import { UserRole, UserEntity } from '../types';
 import { UserValidation } from '../utils/user-validation';
 import { ValidationError } from '../utils/errors';
 
@@ -13,7 +13,7 @@ export class UserRecord implements UserEntity {
   public avatar: string;
   public role: UserRole;
 
-  constructor(user: UserData | UserRecord) {
+  constructor(user: UserEntity) {
     this.id = user.id;
     this.firstName = user.firstName;
     this.lastName = user.lastName;

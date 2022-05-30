@@ -13,3 +13,5 @@ export interface UserEntity {
 }
 
 export type UserEntityRes = Omit<UserEntity, 'password' | 'jwtControlKey'>;
+export type SignupUserEntity = Omit<UserEntity, 'id' | 'role'>;
+export type UserUpdateEntity = Omit<UserEntity, 'username' | 'jwtControlKey' | 'role'> & { newPassword?: string};
