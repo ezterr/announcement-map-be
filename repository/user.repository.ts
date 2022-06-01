@@ -1,11 +1,11 @@
 import { FieldPacket, OkPacket, ResultSetHeader } from 'mysql2';
 import { UserRecord } from '../records/user.record';
 import { pool } from '../utils/db';
-import { UserData } from '../types';
+import { UserEntity } from '../types';
 
 type DbEmailCheckResult = [{ email: string }[], FieldPacket[]];
 type DbUsernameCheckResult = [{ username: string }[], FieldPacket[]];
-type DbUserData = [UserData[], FieldPacket[]];
+type DbUserData = [UserEntity[], FieldPacket[]];
 
 export class UserRepository {
   public static async insert(user: UserRecord): Promise<UserRecord | null> {

@@ -1,7 +1,7 @@
 import passportJWT from 'passport-jwt';
 import { compare } from 'bcrypt';
 import { JwtPayload } from 'jsonwebtoken';
-import { AuthError } from '../../utils/errors';
+import { AuthError } from '../errors';
 import { UserRepository } from '../../repository/user.repository';
 
 export class PassportStrategy {

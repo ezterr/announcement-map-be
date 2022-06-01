@@ -1,20 +1,19 @@
-import { UserRole, UserData, UserForResData } from '../types';
+import { UserRole, UserEntity } from '../types';
 import { UserValidation } from '../utils/user-validation';
 import { ValidationError } from '../utils/errors';
 
-export class UserRecord {
+export class UserRecord implements UserEntity {
   public id: string;
   public firstName: string;
   public lastName: string;
   public username: string;
   public email: string;
-  public password?: string | undefined;
-  public jwtControlKey?: string | undefined;
+  public password: string;
+  public jwtControlKey: string;
   public avatar: string;
   public role: UserRole;
 
-  constructor(user: UserForResData)
-  constructor(user: UserData | UserRecord) {
+  constructor(user: UserEntity) {
     this.id = user.id;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
@@ -30,12 +29,6 @@ export class UserRecord {
     this.validateNotSensitiveData();
     this.validateSensitiveData();
     this.validateVerySensitiveData();
-  }
-
-  public validateForRes() {
-    this.validateNotSensitiveData();
-    this.validateSensitiveData();
-    if (this.password || this.jwtControlKey) throw new Error('You are trying to send highly sensitive data to a user.');
   }
 
   private validateNotSensitiveData() {
@@ -90,5 +83,3 @@ export class UserRecord {
     }
   }
 }
-
-export type UserForResRecord = Omit<UserRecord, 'password' | 'jwtControlKey'>;
