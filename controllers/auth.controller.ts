@@ -47,11 +47,11 @@ export class AuthController {
 
       const user = new UserRecord({
         id: uuid(),
-        firstName,
-        lastName,
-        username,
-        email,
-        avatar: avatar || 'default',
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        username: username.trim(),
+        email: email.trim(),
+        avatar: 'default',
         password: hashPassword,
         jwtControlKey,
         role: UserRole.User,

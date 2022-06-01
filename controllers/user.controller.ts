@@ -45,15 +45,15 @@ export class UserController {
       const user = await UserRepository.findOneById(req.params.userId);
       if (user === null) throw new NotFoundError('Not Found');
 
-      user.firstName = firstName || user.firstName;
-      user.lastName = lastName || user.lastName;
-      user.avatar = avatar || user.avatar;
+      user.firstName = firstName.trim() || user.firstName;
+      user.lastName = lastName.trim() || user.lastName;
+      user.avatar = avatar.trim() || user.avatar;
 
       if (newPassword || email !== user.email) {
         const passwordCompareResult = password ? await compare(password, user.password as string) : false;
 
         if (passwordCompareResult) {
-          user.email = email || user.email;
+          user.email = email.trim() || user.email;
 
           if (newPassword) {
             if (UserValidation.validatePassword(newPassword)) {
