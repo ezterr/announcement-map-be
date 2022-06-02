@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { authJwt, authLogin, checkRefreshToken } from '../middleware/auth';
+import {
+  apiRateLimit, getTokenRateLimit, signInRateLimit, signupRateLimit,
+} from '../utils/rateLimiter';
 
 export const authRouter = Router();
 
 authRouter
-  .post('/signup', AuthController.signup)
-  .post('/signin', authLogin, AuthController.signIn)
-  .get('/token', checkRefreshToken, AuthController.getAccessToken)
-  .delete('/logout', AuthController.logout)
-  .delete('/logout/all', authJwt, AuthController.logoutAll);
+  .post('/signup', signupRateLimit, AuthController.signup)
+  .post('/signin', signInRateLimit, authLogin, AuthController.signIn)
+  .get('/token', getTokenRateLimit, checkRefreshToken, AuthController.getAccessToken)
+  .delete('/logout', apiRateLimit, AuthController.logout)
+  .delete('/logout/all', apiRateLimit, authJwt, AuthController.logoutAll);

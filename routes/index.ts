@@ -3,9 +3,10 @@ import { authRouter } from './auth.router';
 import { usersRouter } from './users.router';
 import { authJwt } from '../middleware/auth';
 import { announcementRouter } from './announcement.router';
+import { apiRateLimit } from '../utils/rateLimiter';
 
 export const router = Router();
 
 router.use('/auth', authRouter);
-router.use('/users', authJwt, usersRouter);
-router.use('/announcement', announcementRouter);
+router.use('/users', apiRateLimit, authJwt, usersRouter);
+router.use('/announcement', apiRateLimit, announcementRouter);
