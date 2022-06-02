@@ -23,10 +23,12 @@ export class UserController {
   }
 
   public static async getUserById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const user = await UserRepository.findOneById(req.params.userId);
+    const { userId } = req.params;
 
-      if (user === null) throw new NotFoundError('Not Found');
+    try {
+      const user = await UserRepository.findOneById(userId);
+
+      if (user === null) throw new NotFoundError(`Not Found user with id: ${userId}`);
 
       const { password, jwtControlKey, ...userEntityRes } = user;
 
@@ -40,10 +42,11 @@ export class UserController {
     const {
       firstName, lastName, email, newPassword, password, avatar,
     } = req.body as UserUpdateEntity;
+    const { userId } = req.params;
 
     try {
-      const user = await UserRepository.findOneById(req.params.userId);
-      if (user === null) throw new NotFoundError('Not Found');
+      const user = await UserRepository.findOneById(userId);
+      if (user === null) throw new NotFoundError(`Not Found user with id: ${userId}`);
 
       user.firstName = firstName.trim() || user.firstName;
       user.lastName = lastName.trim() || user.lastName;
@@ -71,25 +74,25 @@ export class UserController {
       }
 
       user.validateAllData();
-      const result = await UserRepository.update(user);
+      const updateResult = await UserRepository.update(user);
 
-      if (result) {
-        const { password: hashPassword, jwtControlKey, ...userEntityRes } = user;
-        res.json(userEntityRes);
-      } else {
-        throw new Error('Internal server error');
-      }
+      if (!updateResult) throw new Error('User has not been updated');
+
+      const { password: hashPassword, jwtControlKey, ...userEntityRes } = updateResult;
+      res.json(userEntityRes);
     } catch (err) {
       next(err);
     }
   }
 
   public static async deleteUserById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const removedUserId = await UserRepository.deleteById(req.params.userId);
-      if (!removedUserId) throw new ValidationError('Invalid user id');
+    const { userId } = req.params;
 
-      res.send({ removedUserId });
+    try {
+      const deleteResult = await UserRepository.deleteById(userId);
+      if (!deleteResult) throw new ValidationError('Invalid user id');
+
+      res.json({ id: deleteResult });
     } catch (err) {
       next(err);
     }

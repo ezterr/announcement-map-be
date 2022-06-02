@@ -69,4 +69,50 @@ export class AnnouncementController {
       next(err);
     }
   }
+
+  public static async updateById(req: Request, res: Response, next: NextFunction) {
+    const {
+      name, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
+    } = req.body;
+    const { announcementId } = req.params;
+
+    try {
+      const announcement = await AnnouncementRepository.findById(announcementId);
+      if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
+
+      announcement.name = name || announcement.name;
+      announcement.description = description || announcement.description;
+      announcement.price = price !== '' && price !== undefined ? price : announcement.price;
+      announcement.lat = lat !== '' && lat !== undefined ? lat : announcement.lat;
+      announcement.lon = lon !== '' && lon !== undefined ? lon : announcement.lon;
+      announcement.country = country || announcement.country;
+      announcement.city = city || announcement.city;
+      announcement.zipCode = zipCode || announcement.zipCode;
+      announcement.street = street || announcement.street;
+      announcement.buildingNumber = buildingNumber || announcement.buildingNumber;
+      announcement.apartamentNumber = apartamentNumber || announcement.apartamentNumber;
+      announcement.validate();
+
+      const updateResult = await AnnouncementRepository.update(announcement);
+      if (!updateResult) throw new Error('Announcement has not been');
+
+      res.json(updateResult);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async deleteById(req: Request, res: Response, next: NextFunction) {
+    const { announcementId } = req.params;
+
+    try {
+      const deleteResult = await AnnouncementRepository.deleteById(announcementId);
+
+      if (!deleteResult) throw new Error('Announcement has not been deleted');
+
+      res.json({ id: deleteResult });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

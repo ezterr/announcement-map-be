@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { FieldPacket, ResultSetHeader } from 'mysql2';
+import { FieldPacket, OkPacket, ResultSetHeader } from 'mysql2';
 import { pool } from '../utils/db';
 import { AnnouncementEntity } from '../types';
 import { AnnouncementRecord } from '../records/announcement.record';
@@ -31,5 +31,32 @@ export class AnnouncementRepository {
     }) as ResultAnnouncementEntity;
 
     return result.length > 0 ? new AnnouncementRecord(result[0]) : null;
+  }
+
+  public static async update(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
+    const [result] = await pool.execute(
+      'UPDATE `announcement` '
+      + 'SET '
+      + '`name`=:name, '
+      + '`description`=:description, '
+      + '`price`=:price, '
+      + '`lat`=:lon, '
+      + '`country`=:country, '
+      + '`city`=:city, '
+      + '`zipCode`=:zipCode, '
+      + '`street`=:street '
+      + '`buildingNumber`=:buildingNumber '
+      + '`apartamentNumber`=:apartamentNumber '
+      + 'WHERE `id`=:id;',
+      announcement,
+    ) as OkPacket[];
+
+    return result.affectedRows > 0 ? announcement : null;
+  }
+
+  public static async deleteById(id: string): Promise<string | null> {
+    const [result] = await pool.execute('DELETE FROM `announcement` WHERE `id`=:id', { id }) as ResultSetHeader[];
+
+    return result.affectedRows > 0 ? id : null;
   }
 }

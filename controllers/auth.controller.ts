@@ -58,10 +58,10 @@ export class AuthController {
       });
       user.validateAllData();
 
-      const dbResult = await UserRepository.insert(user);
-      if (dbResult === null) throw new Error('User has not been created.');
+      const insertResult = await UserRepository.insert(user);
+      if (!insertResult) throw new Error('User has not been created.');
 
-      const { password: resPassword, jwtControlKey: resJwtControlKey, ...userEntityRes } = dbResult;
+      const { password: resPassword, jwtControlKey: resJwtControlKey, ...userEntityRes } = insertResult;
 
       res.status(201).json(userEntityRes);
     } catch (err) {

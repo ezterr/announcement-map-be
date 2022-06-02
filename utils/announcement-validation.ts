@@ -1,5 +1,3 @@
-import { Address } from '../types';
-
 export class AnnouncementValidation {
   public static validateId(id: string | undefined) {
     return !!(id && id.trim().length === 36);
@@ -14,7 +12,7 @@ export class AnnouncementValidation {
   }
 
   public static validatePrice(price: number): boolean {
-    return !!(price >= 0 && price <= 9999999999.99);
+    return !!(price >= 0 && price <= 9999999999.99 && !Number.isNaN(price));
   }
 
   public static validateDate(date: Date): boolean {
@@ -52,6 +50,6 @@ export class AnnouncementValidation {
   }
 
   public static validateCoordinate(coordinate: number): boolean {
-    return !!(coordinate >= -180 && coordinate <= 180);
+    return !!(coordinate >= -180 && coordinate <= 180 && !Number.isNaN(coordinate));
   }
 }
