@@ -14,7 +14,7 @@ import { UserValidation } from '../utils/user-validation';
 export class AuthController {
   static async signup(req: Request, res: Response, next: NextFunction) {
     const {
-      firstName, lastName, username, email, password, avatar,
+      firstName, lastName, username, email, password,
     } = req.body as SignupUserEntity;
 
     try {

@@ -1,4 +1,5 @@
-import { FieldPacket } from 'mysql2';
+/* eslint-disable max-len */
+import { FieldPacket, ResultSetHeader } from 'mysql2';
 import { pool } from '../utils/db';
 import { AnnouncementEntity } from '../types';
 import { AnnouncementRecord } from '../records/announcement.record';
@@ -6,6 +7,16 @@ import { AnnouncementRecord } from '../records/announcement.record';
 type ResultAnnouncementEntity = [AnnouncementEntity[], FieldPacket[]];
 
 export class AnnouncementRepository {
+  public static async insert(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
+    const [result] = await pool.execute(
+      'INSERT INTO `announcement` (`id`, `name`, `description`, `price`, `createdAt`, `createdBy`, `lat`, `lon`, `country`, `city`, `zipCode`, `street`, `buildingNumber`, `apartamentNumber`) '
+      + 'VALUES (:id, :name, :description, :price, :createdAt, :createdBy, :lat, :lon, :country, :city, :zipCode, :street, :buildingNumber, :apartamentNumber);',
+      announcement,
+    ) as ResultSetHeader[];
+
+    return result.affectedRows > 0 ? announcement : null;
+  }
+
   public static async findAll(search: string = ''): Promise<AnnouncementRecord[]> {
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `name` LIKE :search;', {
       search: `%${search}%`,
@@ -15,7 +26,7 @@ export class AnnouncementRepository {
   }
 
   public static async findById(id: string): Promise<AnnouncementRecord | null> {
-    const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `in`=:id;', {
+    const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `id`=:id;', {
       id,
     }) as ResultAnnouncementEntity;
 
