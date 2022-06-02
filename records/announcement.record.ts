@@ -1,5 +1,4 @@
 import { AnnouncementEntity } from '../types';
-import { UserValidation } from '../utils/user-validation';
 import { ValidationError } from '../utils/errors';
 import { AnnouncementValidation } from '../utils/announcement-validation';
 
@@ -9,23 +8,31 @@ export class AnnouncementRecord implements AnnouncementEntity {
   public description: string;
   public price: number;
   public createdAt: Date;
+  public createdBy: string;
+  public lat: number;
+  public lon: number;
   public country: string;
   public city: string | null;
   public zipCode: string | null;
   public street: string | null;
   public buildingNumber: string | null;
+  public apartamentNumber: string | null;
 
-  constructor(announcement: AnnouncementRecord) {
+  constructor(announcement: AnnouncementEntity) {
     this.id = announcement.id;
     this.name = announcement.name;
     this.description = announcement.description;
     this.price = announcement.price;
     this.createdAt = announcement.createdAt;
+    this.createdBy = announcement.createdBy;
+    this.lat = announcement.lat;
+    this.lon = announcement.lon;
     this.country = announcement.country;
     this.city = announcement.city;
     this.zipCode = announcement.zipCode;
     this.street = announcement.street;
     this.buildingNumber = announcement.buildingNumber;
+    this.apartamentNumber = announcement.apartamentNumber;
   }
 
   public validate() {
@@ -58,6 +65,24 @@ export class AnnouncementRecord implements AnnouncementEntity {
       throw new Error('Date is not instance of Date');
     }
 
+    if (!AnnouncementValidation.validateId(this.createdBy)) {
+      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.name}`);
+    }
+
+    if (!AnnouncementValidation.validateCoordinate(this.lat)) {
+      throw new ValidationError(
+        'Latitude should be between -180 and 180',
+        'Latitude should be between -180 and 180',
+      );
+    }
+
+    if (!AnnouncementValidation.validateCoordinate(this.lon)) {
+      throw new ValidationError(
+        'Longitude should be between -180 and 180',
+        'Longitude should be between -180 and 180',
+      );
+    }
+
     if (!AnnouncementValidation.validateCountry(this.country)) {
       throw new ValidationError(
         'Country must contain at least 2 characters and less than 60.',
@@ -88,8 +113,22 @@ export class AnnouncementRecord implements AnnouncementEntity {
 
     if (!AnnouncementValidation.validateBuildingNumber(this.buildingNumber)) {
       throw new ValidationError(
+        'Building number must contain at least 1 characters and less than 20 or null.',
+        'Building number must contain at least 1 characters and less than 20 or null.',
+      );
+    }
+
+    if (!AnnouncementValidation.validateBuildingNumber(this.buildingNumber)) {
+      throw new ValidationError(
         'City must contain at least 1 characters and less than 20 or null.',
         'City must contain at least 1 characters and less than 20 or null.',
+      );
+    }
+
+    if (!AnnouncementValidation.validateApartamentNumber(this.apartamentNumber)) {
+      throw new ValidationError(
+        'Apartament number must contain at least 1 characters and less than 20 or null.',
+        'Apartament number must contain at least 1 characters and less than 20 or null.',
       );
     }
   }

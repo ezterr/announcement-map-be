@@ -26,14 +26,10 @@ export class AnnouncementValidation {
   }
 
   public static validateCity(city: string | null): boolean {
-    if (city === null) return true;
-
     return !!(city && city.trim().length >= 2 && city.length <= 90);
   }
 
   public static validateZipCode(zipCode: string | null): boolean {
-    if (zipCode === null) return true;
-
     return !!(zipCode && zipCode.trim().length >= 2 && zipCode.length <= 10);
   }
 
@@ -47,5 +43,15 @@ export class AnnouncementValidation {
     if (buildingNumber === null) return true;
 
     return !!(buildingNumber && buildingNumber.trim().length >= 1 && buildingNumber.length <= 20);
+  }
+
+  public static validateApartamentNumber(apartamentNumber: string | null): boolean {
+    if (apartamentNumber === null) return true;
+
+    return !!(apartamentNumber && apartamentNumber.trim().length >= 1 && apartamentNumber.length <= 20);
+  }
+
+  public static validateCoordinate(coordinate: number): boolean {
+    return !!(coordinate >= -180 && coordinate <= 180);
   }
 }
