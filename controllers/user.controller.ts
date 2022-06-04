@@ -48,15 +48,15 @@ export class UserController {
       const user = await UserRepository.findOneById(userId);
       if (user === null) throw new NotFoundError(`Not Found user with id: ${userId}`);
 
-      user.firstName = firstName.trim() || user.firstName;
-      user.lastName = lastName.trim() || user.lastName;
-      user.avatar = avatar.trim() || user.avatar;
+      user.firstName = String(firstName).trim() || user.firstName;
+      user.lastName = String(lastName).trim() || user.lastName;
+      user.avatar = String(avatar).trim() || user.avatar;
 
       if (newPassword || email !== user.email) {
         const passwordCompareResult = password ? await compare(password, user.password as string) : false;
 
         if (passwordCompareResult) {
-          user.email = email.trim() || user.email;
+          user.email = String(email).trim() || user.email;
 
           if (newPassword) {
             if (UserValidation.validatePassword(newPassword)) {

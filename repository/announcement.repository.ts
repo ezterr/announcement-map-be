@@ -5,6 +5,7 @@ import { AnnouncementEntity } from '../types';
 import { AnnouncementRecord } from '../records/announcement.record';
 
 type ResultAnnouncementEntity = [AnnouncementEntity[], FieldPacket[]];
+type ResultAnnouncementAuthor = [{id: string, createdBy: string}[], FieldPacket[]];
 
 export class AnnouncementRepository {
   public static async insert(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
@@ -33,7 +34,15 @@ export class AnnouncementRepository {
     return result.length > 0 ? new AnnouncementRecord(result[0]) : null;
   }
 
-  public static async update(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
+  public static async findAuthorByAnnouncementId(id: string): Promise<string | null> {
+    const [result] = await pool.execute('SELECT `createdBy` FROM `announcement` WHERE `id`=:id;', {
+      id,
+    }) as ResultAnnouncementAuthor;
+
+    return result.length > 0 ? result[0].createdBy : null;
+  }
+
+  public static async updateById(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
     const [result] = await pool.execute(
       'UPDATE `announcement` '
       + 'SET '
@@ -44,8 +53,8 @@ export class AnnouncementRepository {
       + '`country`=:country, '
       + '`city`=:city, '
       + '`zipCode`=:zipCode, '
-      + '`street`=:street '
-      + '`buildingNumber`=:buildingNumber '
+      + '`street`=:street, '
+      + '`buildingNumber`=:buildingNumber, '
       + '`apartamentNumber`=:apartamentNumber '
       + 'WHERE `id`=:id;',
       announcement,

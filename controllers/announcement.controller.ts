@@ -43,19 +43,19 @@ export class AnnouncementController {
 
     const announcement = new AnnouncementRecord({
       id: uuid(),
-      name: name.trim(),
-      description: description.trim(),
-      price: price || 0,
+      name: String(name).trim(),
+      description: String(description).trim(),
+      price: Number(price) || 0,
       createdAt: new Date(),
       createdBy: (req.user as ReqUser).id,
-      lat: lat || 0,
-      lon: lon || 0,
-      country: country.trim(),
-      city: city.trim(),
-      zipCode: zipCode.trim(),
-      street: street.trim() || null,
-      buildingNumber: buildingNumber.trim() || null,
-      apartamentNumber: apartamentNumber.trim() || null,
+      lat: Number(lat),
+      lon: Number(lon),
+      country: String(country).trim(),
+      city: String(city).trim(),
+      zipCode: String(zipCode).trim(),
+      street: street ? String(street).trim() : null,
+      buildingNumber: buildingNumber ? String(buildingNumber).trim() : null,
+      apartamentNumber: apartamentNumber ? String(apartamentNumber).trim() : null,
     });
 
     try {
@@ -80,20 +80,22 @@ export class AnnouncementController {
       const announcement = await AnnouncementRepository.findById(announcementId);
       if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
 
-      announcement.name = name || announcement.name;
-      announcement.description = description || announcement.description;
-      announcement.price = price !== '' && price !== undefined ? price : announcement.price;
-      announcement.lat = lat !== '' && lat !== undefined ? lat : announcement.lat;
-      announcement.lon = lon !== '' && lon !== undefined ? lon : announcement.lon;
-      announcement.country = country || announcement.country;
-      announcement.city = city || announcement.city;
-      announcement.zipCode = zipCode || announcement.zipCode;
-      announcement.street = street || announcement.street;
-      announcement.buildingNumber = buildingNumber || announcement.buildingNumber;
-      announcement.apartamentNumber = apartamentNumber || announcement.apartamentNumber;
+      announcement.name = String(name) || announcement.name;
+      announcement.description = String(description) || announcement.description;
+      announcement.price = price || Number(price) === 0 ? Number(price) : announcement.price;
+      announcement.lat = lat || Number(lat) === 0 ? Number(lat) : announcement.lat;
+      announcement.lon = lon || Number(lon) === 0 ? Number(lon) : announcement.lon;
+      announcement.country = String(country) || announcement.country;
+      announcement.city = String(city) || announcement.city;
+      announcement.zipCode = String(zipCode) || announcement.zipCode;
+      announcement.street = street || street === null ? street : announcement.street;
+      announcement.buildingNumber = buildingNumber || buildingNumber === null
+        ? buildingNumber : announcement.buildingNumber;
+      announcement.apartamentNumber = apartamentNumber || apartamentNumber === null
+        ? apartamentNumber : announcement.apartamentNumber;
       announcement.validate();
 
-      const updateResult = await AnnouncementRepository.update(announcement);
+      const updateResult = await AnnouncementRepository.updateById(announcement);
       if (!updateResult) throw new Error('Announcement has not been');
 
       res.json(updateResult);
