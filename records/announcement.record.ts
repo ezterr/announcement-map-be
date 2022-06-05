@@ -4,7 +4,7 @@ import { AnnouncementValidation } from '../utils/announcement-validation';
 
 export class AnnouncementRecord implements AnnouncementEntity {
   public id: string;
-  public name: string;
+  public title: string;
   public description: string;
   public price: number;
   public createdAt: Date;
@@ -12,15 +12,15 @@ export class AnnouncementRecord implements AnnouncementEntity {
   public lat: number;
   public lon: number;
   public country: string;
-  public city: string | null;
-  public zipCode: string | null;
+  public city: string;
+  public zipCode: string;
   public street: string | null;
   public buildingNumber: string | null;
   public apartamentNumber: string | null;
 
   constructor(announcement: AnnouncementEntity) {
     this.id = announcement.id;
-    this.name = announcement.name;
+    this.title = announcement.title;
     this.description = announcement.description;
     this.price = announcement.price;
     this.createdAt = announcement.createdAt;
@@ -37,10 +37,10 @@ export class AnnouncementRecord implements AnnouncementEntity {
 
   public validate() {
     if (!AnnouncementValidation.validateId(this.id)) {
-      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.name}`);
+      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.title}`);
     }
 
-    if (!AnnouncementValidation.validateName(this.name)) {
+    if (!AnnouncementValidation.validateTitle(this.title)) {
       throw new ValidationError(
         'Name must contain at least 3 characters.',
         'Name must contain at least 3 characters.',
@@ -66,7 +66,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
     }
 
     if (!AnnouncementValidation.validateId(this.createdBy)) {
-      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.name}`);
+      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.title}`);
     }
 
     if (!AnnouncementValidation.validateCoordinate(this.lat)) {

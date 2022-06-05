@@ -1,6 +1,6 @@
 export interface AnnouncementEntity {
   id: string;
-  name: string;
+  title: string;
   description: string;
   price: number;
   createdAt: Date;
@@ -8,8 +8,8 @@ export interface AnnouncementEntity {
   lat: number;
   lon: number;
   country: string;
-  city: string | null;
-  zipCode: string | null;
+  city: string;
+  zipCode: string;
   street: string | null;
   buildingNumber: string | null;
   apartamentNumber: string | null;

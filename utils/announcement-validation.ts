@@ -3,7 +3,7 @@ export class AnnouncementValidation {
     return !!(id && id.trim().length === 36);
   }
 
-  public static validateName(name: string): boolean {
+  public static validateTitle(name: string): boolean {
     return !!(name && name.trim().length >= 3 && name.length <= 128);
   }
 

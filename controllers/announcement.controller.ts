@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { AnnouncementRepository } from '../repository/announcement.repository';
-import { AnnouncementEntity, AnnouncementEntitySimple, ReqUser } from '../types';
+import { AnnouncementEntitySimple, ReqUser } from '../types';
 import { NotFoundError } from '../utils/errors';
 import { AnnouncementRecord } from '../records/announcement.record';
 
@@ -38,12 +38,12 @@ export class AnnouncementController {
 
   public static async addAnnouncement(req: Request, res: Response, next: NextFunction) {
     const {
-      name, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
+      title, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
     } = req.body;
 
     const announcement = new AnnouncementRecord({
       id: uuid(),
-      name: String(name).trim(),
+      title: String(title).trim(),
       description: String(description).trim(),
       price: Number(price) || 0,
       createdAt: new Date(),
@@ -72,7 +72,7 @@ export class AnnouncementController {
 
   public static async updateById(req: Request, res: Response, next: NextFunction) {
     const {
-      name, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
+      title, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
     } = req.body;
     const { announcementId } = req.params;
 
@@ -80,19 +80,17 @@ export class AnnouncementController {
       const announcement = await AnnouncementRepository.findById(announcementId);
       if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
 
-      announcement.name = String(name) || announcement.name;
-      announcement.description = String(description) || announcement.description;
+      announcement.title = String(title).trim() || announcement.title;
+      announcement.description = String(description).trim() || announcement.description;
       announcement.price = price || Number(price) === 0 ? Number(price) : announcement.price;
       announcement.lat = lat || Number(lat) === 0 ? Number(lat) : announcement.lat;
       announcement.lon = lon || Number(lon) === 0 ? Number(lon) : announcement.lon;
-      announcement.country = String(country) || announcement.country;
-      announcement.city = String(city) || announcement.city;
-      announcement.zipCode = String(zipCode) || announcement.zipCode;
-      announcement.street = street || street === null ? street : announcement.street;
-      announcement.buildingNumber = buildingNumber || buildingNumber === null
-        ? buildingNumber : announcement.buildingNumber;
-      announcement.apartamentNumber = apartamentNumber || apartamentNumber === null
-        ? apartamentNumber : announcement.apartamentNumber;
+      announcement.country = String(country).trim() || announcement.country;
+      announcement.city = String(city).trim() || announcement.city;
+      announcement.zipCode = String(zipCode).trim() || announcement.zipCode;
+      announcement.street = street ? String(street).trim() : null;
+      announcement.buildingNumber = buildingNumber ? String(buildingNumber).trim() : null;
+      announcement.apartamentNumber = apartamentNumber ? String(apartamentNumber).trim() : null;
       announcement.validate();
 
       const updateResult = await AnnouncementRepository.updateById(announcement);

@@ -10,8 +10,8 @@ type ResultAnnouncementAuthor = [{id: string, createdBy: string}[], FieldPacket[
 export class AnnouncementRepository {
   public static async insert(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
     const [result] = await pool.execute(
-      'INSERT INTO `announcement` (`id`, `name`, `description`, `price`, `createdAt`, `createdBy`, `lat`, `lon`, `country`, `city`, `zipCode`, `street`, `buildingNumber`, `apartamentNumber`) '
-      + 'VALUES (:id, :name, :description, :price, :createdAt, :createdBy, :lat, :lon, :country, :city, :zipCode, :street, :buildingNumber, :apartamentNumber);',
+      'INSERT INTO `announcement` (`id`, `title`, `description`, `price`, `createdAt`, `createdBy`, `lat`, `lon`, `country`, `city`, `zipCode`, `street`, `buildingNumber`, `apartamentNumber`) '
+      + 'VALUES (:id, :title, :description, :price, :createdAt, :createdBy, :lat, :lon, :country, :city, :zipCode, :street, :buildingNumber, :apartamentNumber);',
       announcement,
     ) as ResultSetHeader[];
 
@@ -19,7 +19,7 @@ export class AnnouncementRepository {
   }
 
   public static async findAll(search: string = ''): Promise<AnnouncementRecord[]> {
-    const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `name` LIKE :search;', {
+    const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `title` LIKE :search;', {
       search: `%${search}%`,
     }) as ResultAnnouncementEntity;
 
@@ -46,7 +46,7 @@ export class AnnouncementRepository {
     const [result] = await pool.execute(
       'UPDATE `announcement` '
       + 'SET '
-      + '`name`=:name, '
+      + '`title`=:title, '
       + '`description`=:description, '
       + '`price`=:price, '
       + '`lat`=:lon, '
