@@ -11,6 +11,10 @@ export class AnnouncementValidation {
     return !!(description && description.length >= 3 && description.length <= 255);
   }
 
+  public static validateCategory(category: string): boolean {
+    return !!(category && category.length >= 3 && category.length <= 255);
+  }
+
   public static validatePrice(price: number): boolean {
     return !!(price >= 0 && price <= 9999999999.99 && !Number.isNaN(price));
   }

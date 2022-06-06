@@ -7,7 +7,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
   public title: string;
   public description: string;
   public price: number;
-  public category: string;
+  public categoryId: string;
   public createdAt: Date;
   public createdBy: string;
   public lat: number;
@@ -24,7 +24,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
     this.title = announcement.title;
     this.description = announcement.description;
     this.price = announcement.price;
-    this.category = announcement.category;
+    this.categoryId = announcement.categoryId;
     this.createdAt = announcement.createdAt;
     this.createdBy = announcement.createdBy;
     this.lat = announcement.lat;
@@ -63,12 +63,19 @@ export class AnnouncementRecord implements AnnouncementEntity {
       );
     }
 
+    if (!AnnouncementValidation.validateCategory(this.categoryId)) {
+      throw new ValidationError(
+        `Incorrect category id from announcement ${this.id}`,
+        'Incorrect category id.',
+      );
+    }
+
     if (!AnnouncementValidation.validateDate(this.createdAt)) {
-      throw new Error('Date is not instance of Date');
+      throw new Error('Date is not instance of Date.');
     }
 
     if (!AnnouncementValidation.validateId(this.createdBy)) {
-      throw new ValidationError(`Incorrect id. Id: ${this.id} in: ${this.title}`);
+      throw new Error(`Incorrect createdBy id. Announcement id: ${this.id}`);
     }
 
     if (!AnnouncementValidation.validateCoordinate(this.lat)) {

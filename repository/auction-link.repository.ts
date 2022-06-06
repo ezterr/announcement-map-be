@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { FieldPacket, ResultSetHeader } from 'mysql2';
 import { AuctionLinkEntity } from '../types';
 import { pool } from '../utils/db';
@@ -23,5 +24,11 @@ export class AuctionLinkRepository {
     ) as ResultAuctionLinkEntity;
 
     return result.length > 0 ? result.map((e) => new AuctionLinkRecord(e)) : [];
+  }
+
+  public static async deleteByAnnouncementId(announcementId: string): Promise<string | null> {
+    const [result] = await pool.execute('DELETE FROM `auction_links` WHERE `announcementId`=:announcementId', { announcementId }) as ResultSetHeader[];
+
+    return result.affectedRows > 0 ? announcementId : null;
   }
 }
