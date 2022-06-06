@@ -9,7 +9,7 @@ import { UserRepository } from '../repository/user.repository';
 import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
 import { ReqUser, SignupUserEntity, UserRole } from '../types';
 import { NotFoundError, ValidationError } from '../utils/errors';
-import { UserValidation } from '../utils/user-validation';
+import { UserValidation } from '../utils/validation/user-validation';
 
 export class AuthController {
   static async signup(req: Request, res: Response, next: NextFunction) {

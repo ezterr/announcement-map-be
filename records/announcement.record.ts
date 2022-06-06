@@ -1,12 +1,13 @@
 import { AnnouncementEntity } from '../types';
 import { ValidationError } from '../utils/errors';
-import { AnnouncementValidation } from '../utils/announcement-validation';
+import { AnnouncementValidation } from '../utils/validation/announcement-validation';
 
 export class AnnouncementRecord implements AnnouncementEntity {
   public id: string;
   public title: string;
   public description: string;
   public price: number;
+  public category: string;
   public createdAt: Date;
   public createdBy: string;
   public lat: number;
@@ -23,6 +24,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
     this.title = announcement.title;
     this.description = announcement.description;
     this.price = announcement.price;
+    this.category = announcement.category;
     this.createdAt = announcement.createdAt;
     this.createdBy = announcement.createdBy;
     this.lat = announcement.lat;

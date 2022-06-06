@@ -1,5 +1,5 @@
 import { AuctionLinkEntity } from '../types';
-import { AuctionLinkValidation } from '../utils/auction-link-validation';
+import { AuctionLinkValidation } from '../utils/validation/auction-link-validation';
 import { ValidationError } from '../utils/errors';
 
 export class AuctionLinkRecord implements AuctionLinkEntity {
@@ -16,19 +16,19 @@ export class AuctionLinkRecord implements AuctionLinkEntity {
   }
 
   public validate() {
-    if (AuctionLinkValidation.validateId(this.id)) {
+    if (!AuctionLinkValidation.validateId(this.id)) {
       throw new Error(`Invalid link id: ${this.id}`);
     }
 
-    if (AuctionLinkValidation.validateId(this.announcementId)) {
+    if (!AuctionLinkValidation.validateId(this.announcementId)) {
       throw new Error(`Invalid announcement id: ${this.id}`);
     }
 
-    if (AuctionLinkValidation.nameValidate(this.name)) {
+    if (!AuctionLinkValidation.nameValidate(this.name)) {
       throw new ValidationError(`invalid url of ${this.id}`, `invalid name: ${this.name}`);
     }
 
-    if (AuctionLinkValidation.urlValidate(this.url)) {
+    if (!AuctionLinkValidation.urlValidate(this.url)) {
       throw new ValidationError(`invalid url of ${this.id}`, `invalid url of ${this.name}`);
     }
   }

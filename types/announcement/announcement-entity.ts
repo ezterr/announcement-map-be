@@ -3,6 +3,7 @@ export interface AnnouncementEntity {
   title: string;
   description: string;
   price: number;
+  category: string;
   createdAt: Date;
   createdBy: string;
   lat: number;

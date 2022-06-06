@@ -10,8 +10,8 @@ type ResultAnnouncementAuthor = [{id: string, createdBy: string}[], FieldPacket[
 export class AnnouncementRepository {
   public static async insert(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {
     const [result] = await pool.execute(
-      'INSERT INTO `announcement` (`id`, `title`, `description`, `price`, `createdAt`, `createdBy`, `lat`, `lon`, `country`, `city`, `zipCode`, `street`, `buildingNumber`, `apartamentNumber`) '
-      + 'VALUES (:id, :title, :description, :price, :createdAt, :createdBy, :lat, :lon, :country, :city, :zipCode, :street, :buildingNumber, :apartamentNumber);',
+      'INSERT INTO `announcement` (`id`, `title`, `description`, `price`, `category`, `createdAt`, `createdBy`, `lat`, `lon`, `country`, `city`, `zipCode`, `street`, `buildingNumber`, `apartamentNumber`) '
+      + 'VALUES (:id, :title, :description, :price, :category, :createdAt, :createdBy, :lat, :lon, :country, :city, :zipCode, :street, :buildingNumber, :apartamentNumber);',
       announcement,
     ) as ResultSetHeader[];
 
@@ -56,6 +56,7 @@ export class AnnouncementRepository {
       + '`street`=:street, '
       + '`buildingNumber`=:buildingNumber, '
       + '`apartamentNumber`=:apartamentNumber '
+      + '`category`=:category '
       + 'WHERE `id`=:id;',
       announcement,
     ) as OkPacket[];

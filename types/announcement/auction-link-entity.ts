@@ -6,3 +6,4 @@ export interface AuctionLinkEntity {
 }
 
 export type AuctionLinkEntityRes = Omit<AuctionLinkEntity, 'announcementId'>
+export type AuctionLinkEntitySimple = Omit<AuctionLinkEntity, 'announcementId' | 'id'>

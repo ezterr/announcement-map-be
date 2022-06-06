@@ -1,5 +1,5 @@
 import { UserRole, UserEntity } from '../types';
-import { UserValidation } from '../utils/user-validation';
+import { UserValidation } from '../utils/validation/user-validation';
 import { ValidationError } from '../utils/errors';
 
 export class UserRecord implements UserEntity {

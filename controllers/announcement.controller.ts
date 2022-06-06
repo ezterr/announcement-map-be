@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { AnnouncementRepository } from '../repository/announcement.repository';
-import { AnnouncementEntitySimple, ReqUser } from '../types';
-import { NotFoundError } from '../utils/errors';
+import { AnnouncementEntitySimple, AuctionLinkEntitySimple, ReqUser } from '../types';
+import { NotFoundError, ValidationError } from '../utils/errors';
 import { AnnouncementRecord } from '../records/announcement.record';
+import { AuctionLinkRecord } from '../records/auction-link.record';
+import { AuctionLinkRepository } from '../repository/auction-link.repository';
 
 export class AnnouncementController {
   public static async getAnnouncements(req: Request, res: Response, next: NextFunction) {
@@ -38,7 +40,19 @@ export class AnnouncementController {
 
   public static async addAnnouncement(req: Request, res: Response, next: NextFunction) {
     const {
-      title, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
+      title,
+      description,
+      price,
+      lat,
+      lon,
+      country,
+      city,
+      zipCode,
+      street,
+      buildingNumber,
+      apartamentNumber,
+      auctionLinks,
+      category,
     } = req.body;
 
     const announcement = new AnnouncementRecord({
@@ -56,15 +70,39 @@ export class AnnouncementController {
       street: street ? String(street).trim() : null,
       buildingNumber: buildingNumber ? String(buildingNumber).trim() : null,
       apartamentNumber: apartamentNumber ? String(apartamentNumber).trim() : null,
+      category,
     });
 
     try {
       announcement.validate();
+      const auctionLinkRecords = auctionLinks.map((e: AuctionLinkEntitySimple) => {
+        const auctionLink = new AuctionLinkRecord({
+          id: uuid(),
+          name: e.name || '',
+          url: e.url || '',
+          announcementId: announcement.id,
+        });
+        auctionLink.validate();
+
+        return auctionLink;
+      }) as AuctionLinkRecord[];
+
+      if (auctionLinkRecords.length > 5) {
+        throw new ValidationError(
+          'you can add up to 5 auction links',
+          'you can add up to 5 auction links',
+        );
+      }
 
       const insertResult = await AnnouncementRepository.insert(announcement);
       if (insertResult === null) throw new Error('Announcement has not been created');
 
-      res.json(insertResult);
+      for await (const auctionLinkRecord of auctionLinkRecords) {
+        const insertAuctionLinkResult = await AuctionLinkRepository.insert(auctionLinkRecord);
+        if (insertAuctionLinkResult === null) throw new Error('Announcement has not been created');
+      }
+
+      res.json({ ...insertResult, auctionLinks: [...auctionLinkRecords] });
     } catch (err) {
       next(err);
     }
@@ -72,7 +110,7 @@ export class AnnouncementController {
 
   public static async updateById(req: Request, res: Response, next: NextFunction) {
     const {
-      title, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
+      title, description, price, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber, category,
     } = req.body;
     const { announcementId } = req.params;
 
@@ -91,6 +129,7 @@ export class AnnouncementController {
       announcement.street = street ? String(street).trim() : null;
       announcement.buildingNumber = buildingNumber ? String(buildingNumber).trim() : null;
       announcement.apartamentNumber = apartamentNumber ? String(apartamentNumber).trim() : null;
+      announcement.category = category || announcement.category;
       announcement.validate();
 
       const updateResult = await AnnouncementRepository.updateById(announcement);

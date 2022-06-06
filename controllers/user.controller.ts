@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { hash, compare } from 'bcrypt';
 import { UserRepository } from '../repository/user.repository';
 import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
-import { UserValidation } from '../utils/user-validation';
+import { UserValidation } from '../utils/validation/user-validation';
 import { UserEntityRes, UserUpdateEntity } from '../types';
 
 export class UserController {
