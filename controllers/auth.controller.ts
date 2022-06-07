@@ -5,13 +5,13 @@ import { promisify } from 'util';
 import { UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
 import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
-import { ReqUser } from '../types';
+import { ReqUser, SignupUserEntity } from '../types';
 import { NotFoundError, ValidationError } from '../utils/errors';
 import { CreateUserRecordReq } from '../utils/create-user-record-req';
 
 export class AuthController {
   static async signup(req: Request, res: Response, next: NextFunction) {
-    const { username, email } = req.body;
+    const { username, email } = req.body as SignupUserEntity;
 
     try {
       const isEmailUniqueness = await UserRepository.checkEmailUniqueness(email);

@@ -26,3 +26,5 @@ export interface AnnouncementEntityUser {
   id: string;
   createdBy: string
 }
+
+export type AnnouncementEntitySave = Omit<AnnouncementEntity, 'id' | 'createdBy' | 'createdAt'>

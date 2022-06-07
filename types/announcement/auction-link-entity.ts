@@ -5,5 +5,4 @@ export interface AuctionLinkEntity {
   url: string;
 }
 
-export type AuctionLinkEntityRes = Omit<AuctionLinkEntity, 'announcementId'>
-export type AuctionLinkEntitySimple = Omit<AuctionLinkEntity, 'announcementId' | 'id'>
+export type AuctionLinkEntitySave = Omit<AuctionLinkEntity, 'announcementId' | 'id'>
