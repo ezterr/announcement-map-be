@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import { FieldPacket, OkPacket, ResultSetHeader } from 'mysql2';
 import { pool } from '../utils/db';
-import { AnnouncementEntity } from '../types';
+import { AnnouncementEntity, AnnouncementEntityUser } from '../types';
 import { AnnouncementRecord } from '../records/announcement.record';
 
 type ResultAnnouncementEntity = [AnnouncementEntity[], FieldPacket[]];
-type ResultAnnouncementAuthor = [{id: string, createdBy: string}[], FieldPacket[]];
+type ResultAnnouncementAuthor = [AnnouncementEntityUser[], FieldPacket[]];
 
 export class AnnouncementRepository {
   public static async insert(announcement: AnnouncementRecord): Promise<AnnouncementRecord | null> {

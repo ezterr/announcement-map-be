@@ -4,7 +4,7 @@ import { AnnouncementEntitySimple } from '../types';
 import { NotFoundError } from '../utils/errors';
 import { AuctionLinkRepository } from '../repository/auction-link.repository';
 import { CreateAnnouncementRecordReq } from '../utils/create-announcement-record-req';
-import { createAuctionLinksRecords } from '../utils/create-auction-links-records';
+import { auctionLinkRecordsList } from '../utils/auction-link-records-list';
 
 export class AnnouncementController {
   public static async getAnnouncements(req: Request, res: Response, next: NextFunction) {
@@ -43,8 +43,8 @@ export class AnnouncementController {
     const { auctionLinks } = req.body;
 
     try {
-      const announcement = CreateAnnouncementRecordReq.CreateAnnouncement(req);
-      const auctionLinkRecords = createAuctionLinksRecords(auctionLinks, announcement.id);
+      const announcement = CreateAnnouncementRecordReq.createAnnouncement(req);
+      const auctionLinkRecords = auctionLinkRecordsList(auctionLinks, announcement.id);
 
       const insertResult = await AnnouncementRepository.insert(announcement);
       if (insertResult === null) throw new Error('Announcement has not been created');
@@ -68,8 +68,8 @@ export class AnnouncementController {
       const announcement = await AnnouncementRepository.findById(announcementId);
       if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
 
-      const newAnnouncement = CreateAnnouncementRecordReq.UpdateAnnouncement(req, announcement);
-      const auctionLinkRecords = createAuctionLinksRecords(auctionLinks, newAnnouncement.id);
+      const newAnnouncement = CreateAnnouncementRecordReq.updateAnnouncement(req, announcement);
+      const auctionLinkRecords = auctionLinkRecordsList(auctionLinks, newAnnouncement.id);
 
       const updateResult = await AnnouncementRepository.updateById(newAnnouncement);
       if (!updateResult) throw new Error('Announcement has not been');

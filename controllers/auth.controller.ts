@@ -1,62 +1,31 @@
 import { NextFunction, Request, Response } from 'express';
-import { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { v4 as uuid } from 'uuid';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import { UserRecord } from '../records/user.record';
 import { UserRepository } from '../repository/user.repository';
 import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
-import { ReqUser, SignupUserEntity, UserRole } from '../types';
+import { ReqUser } from '../types';
 import { NotFoundError, ValidationError } from '../utils/errors';
-import { UserValidation } from '../utils/validation/user-validation';
+import { CreateUserRecordReq } from '../utils/create-user-record-req';
 
 export class AuthController {
   static async signup(req: Request, res: Response, next: NextFunction) {
-    const {
-      firstName, lastName, username, email, password,
-    } = req.body as SignupUserEntity;
+    const { username, email } = req.body;
 
     try {
       const isEmailUniqueness = await UserRepository.checkEmailUniqueness(email);
       const isUsernameUniqueness = await UserRepository.checkUsernameUniqueness(username);
 
       if (!isEmailUniqueness) {
-        throw new ValidationError(
-          'Email must be uniqueness.',
-          'Email must be uniqueness.',
-        );
+        throw new ValidationError('Email must be uniqueness.', 'Email must be uniqueness.');
       }
 
       if (!isUsernameUniqueness) {
-        throw new ValidationError(
-          'Username must be uniqueness.',
-          'Username must be uniqueness.',
-        );
+        throw new ValidationError('Username must be uniqueness.', 'Username must be uniqueness.');
       }
 
-      if (!UserValidation.validatePassword(password)) {
-        throw new ValidationError(
-          'Password must contain eight characters, at least one letter and one number.',
-          'Password must contain eight characters, at least one letter and one number.',
-        );
-      }
-
-      const jwtControlKey = (await promisify(randomBytes)(32)).toString('hex');
-      const hashPassword = await hash(password as string, 12);
-
-      const user = new UserRecord({
-        id: uuid(),
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        username: username.trim(),
-        email: email.trim(),
-        avatar: 'default',
-        password: hashPassword,
-        jwtControlKey,
-        role: UserRole.User,
-      });
-      user.validateAllData();
+      const user = await CreateUserRecordReq.createUser(req);
 
       const insertResult = await UserRepository.insert(user);
       if (!insertResult) throw new Error('User has not been created.');

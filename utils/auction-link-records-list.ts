@@ -3,7 +3,7 @@ import { AuctionLinkEntitySimple } from '../types';
 import { AuctionLinkRecord } from '../records/auction-link.record';
 import { ValidationError } from './errors';
 
-export function createAuctionLinksRecords(auctionLinks: AuctionLinkEntitySimple[], announcementId: string): AuctionLinkRecord[] {
+export function auctionLinkRecordsList(auctionLinks: AuctionLinkEntitySimple[], announcementId: string): AuctionLinkRecord[] {
   if (auctionLinks.length > 5) {
     throw new ValidationError(
       'you can add up to 5 auction links',

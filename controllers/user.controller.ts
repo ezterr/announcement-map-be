@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { hash, compare } from 'bcrypt';
 import { UserRepository } from '../repository/user.repository';
-import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
-import { UserValidation } from '../utils/validation/user-validation';
-import { UserEntityRes, UserUpdateEntity } from '../types';
+import { NotFoundError, ValidationError } from '../utils/errors';
+import { CreateUserRecordReq } from '../utils/create-user-record-req';
 
 export class UserController {
   public static async getAllUsers(req: Request, res: Response, next: NextFunction) {
@@ -11,7 +9,7 @@ export class UserController {
     const count: number | undefined = Number(req.query?.count !== undefined ? req.query.count : 100);
 
     try {
-      const users = (await UserRepository.findAll(offset, count)).map((e): UserEntityRes => {
+      const users = (await UserRepository.findAll(offset, count)).map((e) => {
         const { password, jwtControlKey, ...userEntityRes } = e;
         return userEntityRes;
       });
@@ -39,42 +37,14 @@ export class UserController {
   }
 
   public static async updateUserById(req: Request, res: Response, next: NextFunction) {
-    const {
-      firstName, lastName, email, newPassword, password, avatar,
-    } = req.body as UserUpdateEntity;
     const { userId } = req.params;
 
     try {
       const user = await UserRepository.findOneById(userId);
       if (user === null) throw new NotFoundError(`Not Found user with id: ${userId}`);
 
-      user.firstName = String(firstName).trim() || user.firstName;
-      user.lastName = String(lastName).trim() || user.lastName;
-      user.avatar = String(avatar).trim() || user.avatar;
-
-      if (newPassword || email !== user.email) {
-        const passwordCompareResult = password ? await compare(password, user.password as string) : false;
-
-        if (passwordCompareResult) {
-          user.email = String(email).trim() || user.email;
-
-          if (newPassword) {
-            if (UserValidation.validatePassword(newPassword)) {
-              user.password = await hash(newPassword as string, 12);
-            } else {
-              throw new ValidationError(
-                'password must contain eight characters, at least one letter and one number',
-                'password must contain eight characters, at least one letter and one number',
-              );
-            }
-          }
-        } else {
-          throw new AuthError('Unauthorized', 'Unauthorized');
-        }
-      }
-
-      user.validateAllData();
-      const updateResult = await UserRepository.update(user);
+      const newUser = await CreateUserRecordReq.updateUser(req, user);
+      const updateResult = await UserRepository.update(newUser);
 
       if (!updateResult) throw new Error('User has not been updated');
 

@@ -4,7 +4,7 @@ import { AnnouncementRecord } from '../records/announcement.record';
 import { ReqUser } from '../types';
 
 export class CreateAnnouncementRecordReq {
-  public static CreateAnnouncement(req: Request): AnnouncementRecord {
+  public static createAnnouncement(req: Request): AnnouncementRecord {
     const { body, user } = req;
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
@@ -32,7 +32,7 @@ export class CreateAnnouncementRecordReq {
     return announcement;
   }
 
-  public static UpdateAnnouncement(req: Request, oldAnnouncement: AnnouncementRecord): AnnouncementRecord {
+  public static updateAnnouncement(req: Request, oldAnnouncement: AnnouncementRecord): AnnouncementRecord {
     const { body } = req;
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,

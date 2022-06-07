@@ -115,8 +115,8 @@ export class AnnouncementRecord implements AnnouncementEntity {
 
     if (!AnnouncementValidation.validateStreet(this.street)) {
       throw new ValidationError(
-        'City must contain at least 2 characters and less than 90 or null.',
-        'City must contain at least 2 characters and less than 90 or null.',
+        'Street must contain at least 2 characters and less than 90 or null.',
+        'Street must contain at least 2 characters and less than 90 or null.',
       );
     }
 
