@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { AuthError, ForbiddenError } from '../utils/errors';
-import { ReqUser, UserRole } from '../types';
+import { UserRequest, UserRole } from '../types';
 import { AnnouncementRepository } from '../repository/announcement.repository';
 
 export const authLogin = async (req: Request, res: Response, next: NextFunction) => (
@@ -36,7 +36,7 @@ export const checkRefreshToken = (req: Request, res: Response, next: NextFunctio
 
 export function checkUserRoutesAccess(req: Request, res: Response, next: NextFunction) {
   const { userId: userIdParam } = req.params;
-  const { id: userId, role: userRole } = req.user as ReqUser;
+  const { id: userId, role: userRole } = req.user as UserRequest;
 
   try {
     if (userId === userIdParam || userRole === UserRole.Admin) {
@@ -52,7 +52,7 @@ export function checkUserRoutesAccess(req: Request, res: Response, next: NextFun
 
 export async function checkAnnouncementAccess(req: Request, res: Response, next: NextFunction) {
   const { announcementId: announcementIdParam } = req.params;
-  const { id: userId, role: userRole } = req.user as ReqUser;
+  const { id: userId, role: userRole } = req.user as UserRequest;
 
   try {
     const authorId = await AnnouncementRepository.findAuthorByAnnouncementId(announcementIdParam);

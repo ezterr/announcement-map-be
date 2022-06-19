@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { checkUserRoutesAccess } from '../middleware/auth';
+import { authJwt, checkUserRoutesAccess } from '../middleware/auth';
 import { UserController } from '../controllers/user.controller';
 
 export const usersRouter = Router();
 
-usersRouter
-  .get('/', checkUserRoutesAccess, UserController.getAllUsers);
+usersRouter.route('/')
+  .get(authJwt, checkUserRoutesAccess, UserController.getUsers)
+  .post(UserController.createUser);
 
 usersRouter.route('/:userId')
-  .get(checkUserRoutesAccess, UserController.getUserById)
-  .patch(checkUserRoutesAccess, UserController.updateUserById)
-  .delete(checkUserRoutesAccess, UserController.deleteUserById);
+  .get(authJwt, checkUserRoutesAccess, UserController.getUser)
+  .patch(authJwt, checkUserRoutesAccess, UserController.updateUser)
+  .delete(authJwt, checkUserRoutesAccess, UserController.deleteUser);

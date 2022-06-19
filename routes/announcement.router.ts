@@ -6,9 +6,9 @@ export const announcementRouter = Router();
 
 announcementRouter
   .get('/', AnnouncementController.getAnnouncements)
-  .post('/', authJwt, AnnouncementController.addAnnouncement);
+  .post('/', authJwt, AnnouncementController.createAnnouncement);
 
 announcementRouter.route('/:announcementId')
   .get(AnnouncementController.getAnnouncement)
-  .patch(authJwt, checkAnnouncementAccess, AnnouncementController.updateById)
-  .delete(authJwt, checkAnnouncementAccess, AnnouncementController.deleteById);
+  .patch(authJwt, checkAnnouncementAccess, AnnouncementController.updateAnnouncement)
+  .delete(authJwt, checkAnnouncementAccess, AnnouncementController.deleteAnnouncement);

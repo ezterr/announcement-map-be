@@ -12,6 +12,4 @@ export interface UserEntity {
     role: UserRole;
 }
 
-export type UserEntityRes = Omit<UserEntity, 'password' | 'jwtControlKey'>;
-export type SignupUserEntity = Omit<UserEntity, 'id' | 'role' | 'jwtControlKey'>;
-export type UpdateUserEntity = Omit<UserEntity, 'username' | 'jwtControlKey' | 'role'> & { newPassword?: string};
+export type UserEntityResponse = Omit<UserEntity, 'password' | 'jwtControlKey'>;

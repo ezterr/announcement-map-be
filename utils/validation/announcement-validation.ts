@@ -1,22 +1,32 @@
 export class AnnouncementValidation {
   public static validateId(id: string | undefined) {
-    return !!(id && id.length === 36);
+    return !!(id && typeof id === 'string' && id.trim().length === 36);
   }
 
-  public static validateTitle(name: string): boolean {
-    return !!(name && name.length >= 3 && name.length <= 128);
+  public static validateTitle(title: string): boolean {
+    return !!(title && typeof title === 'string' && title.trim().length >= 3 && title.length <= 128);
   }
 
   public static validateDescription(description: string): boolean {
-    return !!(description && description.length >= 3 && description.length <= 255);
+    return !!(
+      description
+      && typeof description === 'string'
+      && description.trim().length >= 3
+      && description.length <= 255
+    );
   }
 
   public static validateCategory(category: string): boolean {
-    return !!(category && category.length >= 3 && category.length <= 255);
+    return !!(
+      category
+      && typeof category === 'string'
+      && category.trim().length >= 3
+      && category.length <= 255
+    );
   }
 
   public static validatePrice(price: number): boolean {
-    return !!(price >= 0 && price <= 9999999999.99 && !Number.isNaN(price));
+    return !!(typeof price === 'number' && price >= 0 && price <= 9999999999.99 && !Number.isNaN(price));
   }
 
   public static validateDate(date: Date): boolean {
@@ -24,36 +34,46 @@ export class AnnouncementValidation {
   }
 
   public static validateCountry(country: string): boolean {
-    return !!(country && country.length >= 2 && country.length <= 60);
+    return !!(country && typeof country === 'string' && country.trim().length >= 2 && country.length <= 60);
   }
 
   public static validateCity(city: string): boolean {
-    return !!(city && city.length >= 2 && city.length <= 90);
+    return !!(city && typeof city === 'string' && city.trim().length >= 2 && city.length <= 90);
   }
 
   public static validateZipCode(zipCode: string): boolean {
-    return !!(zipCode && zipCode.length >= 2 && zipCode.length <= 10);
+    return !!(zipCode && typeof zipCode === 'string' && zipCode.trim().length >= 2 && zipCode.length <= 10);
   }
 
   public static validateStreet(street: string | null): boolean {
     if (street === null) return true;
 
-    return !!(street && street.length >= 2 && street.length <= 90);
+    return !!(street && typeof street === 'string' && street.trim().length >= 2 && street.length <= 90);
   }
 
   public static validateBuildingNumber(buildingNumber: string | null): boolean {
     if (buildingNumber === null) return true;
 
-    return !!(buildingNumber && buildingNumber.length >= 1 && buildingNumber.length <= 20);
+    return !!(
+      buildingNumber
+      && typeof buildingNumber === 'string'
+      && buildingNumber.trim().length >= 1
+      && buildingNumber.length <= 20
+    );
   }
 
   public static validateApartamentNumber(apartamentNumber: string | null): boolean {
     if (apartamentNumber === null) return true;
 
-    return !!(apartamentNumber && apartamentNumber.length >= 1 && apartamentNumber.length <= 20);
+    return !!(
+      apartamentNumber
+      && typeof apartamentNumber === 'string'
+      && apartamentNumber.length >= 1
+      && apartamentNumber.length <= 20
+    );
   }
 
   public static validateCoordinate(coordinate: number): boolean {
-    return !!(coordinate >= -180 && coordinate <= 180 && !Number.isNaN(coordinate));
+    return !!(typeof coordinate === 'number' && coordinate >= -180 && coordinate <= 180 && !Number.isNaN(coordinate));
   }
 }

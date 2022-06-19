@@ -1,18 +1,19 @@
-import { Request } from 'express';
 import { v4 as uuid } from 'uuid';
 import { promisify } from 'util';
 import { randomBytes } from 'crypto';
 import { compare, hash } from 'bcrypt';
-import { SignupUserEntity, UserRole, UpdateUserEntity } from '../types';
-import { UserRecord } from '../records/user.record';
-import { UserValidation } from './validation/user-validation';
-import { AuthError, ValidationError } from './errors';
+import { UserRole } from '../../types';
+import { UserRecord } from '../../records/user.record';
+import { UserValidation } from '../validation/user-validation';
+import { AuthError, ValidationError } from '../errors';
+import { UpdateUserDto } from '../../types/dto/update-user.dto';
+import { CreateUserDto } from '../../types/dto/create-user.dto';
 
-export class CreateUserRecordReq {
-  public static async createUser(req: Request): Promise<UserRecord> {
+export class CreateUserRecord {
+  public static async createUserRecord(body: CreateUserDto): Promise<UserRecord> {
     const {
       firstName, lastName, username, email, password,
-    } = req.body as SignupUserEntity;
+    } = body;
 
     if (!UserValidation.validatePassword(password)) {
       throw new ValidationError(
@@ -40,10 +41,10 @@ export class CreateUserRecordReq {
     return user;
   }
 
-  public static async updateUser(req: Request, oldUser: UserRecord): Promise<UserRecord> {
+  public static async updateUserRecord(body: UpdateUserDto, oldUser: UserRecord): Promise<UserRecord> {
     const {
       firstName, lastName, email, newPassword, password, avatar,
-    } = req.body as UpdateUserEntity;
+    } = body;
 
     const user = new UserRecord(oldUser);
 

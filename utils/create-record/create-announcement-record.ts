@@ -1,39 +1,37 @@
-import { Request } from 'express';
 import { v4 as uuid } from 'uuid';
-import { AnnouncementRecord } from '../records/announcement.record';
-import { ReqUser } from '../types';
+import { AnnouncementRecord } from '../../records/announcement.record';
+import { CreateAnnouncementDto } from '../../types/dto/create-announcement.dto';
 
-export class CreateAnnouncementRecordReq {
-  public static createAnnouncement(req: Request): AnnouncementRecord {
-    const { body, user } = req;
+export class CreateAnnouncementRecord {
+  public static createAnnouncementRecord(body: CreateAnnouncementDto, userId: string): AnnouncementRecord {
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
     } = body;
 
     const announcement = new AnnouncementRecord({
       id: uuid(),
-      title: String(title).trim(),
-      description: String(description).trim(),
-      price: Number(price) || 0,
-      categoryId: categoryId.trim(),
+      title: title || '',
+      description: description || '',
+      price: price ? Number(price) : 0,
+      categoryId: categoryId || '',
       createdAt: new Date(),
-      createdBy: (user as ReqUser).id,
-      lat: Number(lat),
-      lon: Number(lon),
-      country: String(country).trim(),
-      city: String(city).trim(),
-      zipCode: String(zipCode).trim(),
-      street: street ? String(street).trim() : null,
-      buildingNumber: buildingNumber ? String(buildingNumber).trim() : null,
-      apartamentNumber: apartamentNumber ? String(apartamentNumber).trim() : null,
+      createdBy: userId,
+      lat: lat ? Number(lat) : 0,
+      lon: lon ? Number(lon) : 0,
+      country: country || '',
+      city: city || '',
+      zipCode: zipCode || '',
+      street: street || null,
+      buildingNumber: buildingNumber || null,
+      apartamentNumber: apartamentNumber || null,
     });
     announcement.validate();
 
     return announcement;
   }
 
-  public static updateAnnouncement(req: Request, oldAnnouncement: AnnouncementRecord): AnnouncementRecord {
-    const { body } = req;
+  public static updateAnnouncementRecord(body: CreateAnnouncementDto, oldAnnouncement: AnnouncementRecord):
+    AnnouncementRecord {
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
     } = body;

@@ -1,3 +1,5 @@
+import { AuctionLinkEntity } from './auction-link-entity';
+
 export interface AnnouncementEntity {
   id: string;
   title: string;
@@ -16,15 +18,15 @@ export interface AnnouncementEntity {
   apartamentNumber: string | null;
 }
 
-export interface AnnouncementEntitySimple {
+export interface AnnouncementEntityUser {
+  id: string;
+  createdBy: string;
+}
+
+export interface AnnouncementEntitySimpleResponse {
   id: string;
   lat: number;
   lon: number;
 }
 
-export interface AnnouncementEntityUser {
-  id: string;
-  createdBy: string
-}
-
-export type AnnouncementEntitySave = Omit<AnnouncementEntity, 'id' | 'createdBy' | 'createdAt'>
+export type AnnouncementEntityResponse = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};

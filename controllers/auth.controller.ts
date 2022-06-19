@@ -1,85 +1,48 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { randomBytes } from 'crypto';
-import { promisify } from 'util';
 import { UserRecord } from '../records/user.record';
-import { UserRepository } from '../repository/user.repository';
-import { AUTH_TIME, JWT_SECRET, JWT_SECRET_REFRESH } from '../config/secret';
-import { ReqUser, SignupUserEntity } from '../types';
-import { NotFoundError, ValidationError } from '../utils/errors';
-import { CreateUserRecordReq } from '../utils/create-user-record-req';
+import { AuthService } from '../services/auth.service';
 
 export class AuthController {
-  static async signup(req: Request, res: Response, next: NextFunction) {
-    const { username, email } = req.body as SignupUserEntity;
+  static async signIn(req: Request, res: Response, next: NextFunction) {
+    const { id, role, jwtControlKey } = req.user as UserRecord;
 
     try {
-      const isEmailUniqueness = await UserRepository.checkEmailUniqueness(email);
-      const isUsernameUniqueness = await UserRepository.checkUsernameUniqueness(username);
+      const { token, refreshToken } = AuthService.signIn(id, role, jwtControlKey);
 
-      if (!isEmailUniqueness) {
-        throw new ValidationError('Email must be uniqueness.', 'Email must be uniqueness.');
-      }
-
-      if (!isUsernameUniqueness) {
-        throw new ValidationError('Username must be uniqueness.', 'Username must be uniqueness.');
-      }
-
-      const user = await CreateUserRecordReq.createUser(req);
-
-      const insertResult = await UserRepository.insert(user);
-      if (!insertResult) throw new Error('User has not been created.');
-
-      const { password: resPassword, jwtControlKey: resJwtControlKey, ...userEntityRes } = insertResult;
-
-      res.status(201).json(userEntityRes);
+      res
+        .cookie('refreshJwt', refreshToken, { httpOnly: true, secure: false })
+        .json({ token });
     } catch (err) {
       next(err);
     }
   }
 
-  static async signIn(req: Request, res: Response) {
-    const token = jwt.sign({
-      id: (req.user as UserRecord).id,
-      role: (req.user as UserRecord).role,
-    }, JWT_SECRET, { expiresIn: AUTH_TIME });
+  static async getAccessToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id, role } = req.user as UserRecord;
+      const token = AuthService.getAccessToken(id, role);
 
-    const refreshToken = jwt
-      .sign({
-        id: (req.user as UserRecord).id,
-        key: (req.user as UserRecord).jwtControlKey,
-        role: (req.user as UserRecord).role,
-      }, JWT_SECRET_REFRESH);
-
-    res.cookie('refreshJwt', refreshToken, { httpOnly: true, secure: false });
-    res.json({ token });
-  }
-
-  static async getAccessToken(req: Request, res: Response) {
-    const token = jwt.sign({
-      id: (req.user as UserRecord).id,
-      role: (req.user as UserRecord).role,
-    }, JWT_SECRET, { expiresIn: AUTH_TIME });
-
-    res.json({ token });
+      res.json({ token });
+    } catch (err) {
+      next(err);
+    }
   }
 
   static async logout(req: Request, res: Response) {
-    res.clearCookie('refreshJwt');
-    res.json({ message: 'logout' });
+    res
+      .clearCookie('refreshJwt')
+      .json({ message: 'logout' });
   }
 
-  static async logoutAll(req: Request, res: Response) {
-    const jwtControlKey = (await promisify(randomBytes)(32)).toString('hex');
+  static async logoutAll(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.user as UserRecord;
+    try {
+      await AuthService.logoutAll(id);
 
-    const user = await UserRepository.findOneById((req.user as ReqUser).id);
-
-    if (user === null) throw new NotFoundError('Not Found');
-
-    user.jwtControlKey = jwtControlKey;
-
-    await UserRepository.update(user);
-    res.clearCookie('refreshJwt');
-    res.json({ message: 'logout from all devices' });
+      res.clearCookie('refreshJwt');
+      res.json({ message: 'logout from all devices' });
+    } catch (err) {
+      next(err);
+    }
   }
 }

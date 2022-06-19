@@ -5,4 +5,7 @@ export interface AuctionLinkEntity {
   url: string;
 }
 
-export type AuctionLinkEntitySave = Omit<AuctionLinkEntity, 'announcementId' | 'id'>
+export interface AuctionLinkSave {
+  name: string;
+  url: string;
+}

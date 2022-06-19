@@ -1,4 +1,4 @@
-export interface ReqUser {
+export interface UserRequest {
   id: string;
   role: string;
   iat: number;

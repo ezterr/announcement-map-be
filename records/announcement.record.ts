@@ -44,8 +44,8 @@ export class AnnouncementRecord implements AnnouncementEntity {
 
     if (!AnnouncementValidation.validateTitle(this.title)) {
       throw new ValidationError(
-        'Name must contain at least 3 characters.',
-        'Name must contain at least 3 characters.',
+        'Title must contain at least 3 characters.',
+        'Title must contain at least 3 characters.',
       );
     }
 
