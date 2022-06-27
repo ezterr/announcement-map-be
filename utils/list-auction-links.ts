@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { AuctionLinkRecord } from '../records/auction-link.record';
 import { ValidationError } from './errors';
-import { AuctionLinkSave } from '../types';
+import { CreateAuctionLinkDto } from '../types';
 
-export function listAuctionLinks(auctionLinks: AuctionLinkSave[], announcementId: string): AuctionLinkRecord[] {
+export function listAuctionLinks(auctionLinks: CreateAuctionLinkDto[], announcementId: string): AuctionLinkRecord[] {
   if (auctionLinks.length > 5) {
     throw new ValidationError(
       'you can add up to 5 auction links',
@@ -12,7 +12,7 @@ export function listAuctionLinks(auctionLinks: AuctionLinkSave[], announcementId
   }
 
   return auctionLinks
-    ? auctionLinks.map((e: AuctionLinkSave) => {
+    ? auctionLinks.map((e: CreateAuctionLinkDto) => {
       const auctionLink = new AuctionLinkRecord({
         id: uuid(),
         name: e.name || '',

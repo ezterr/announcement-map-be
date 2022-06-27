@@ -2,36 +2,72 @@ import { UserRole } from '../../types';
 
 export class UserValidation {
   public static validateId(id: string) {
-    return !!(id && id.length === 36);
+    return !!(
+      id
+      && typeof id === 'string'
+      && id.length === 36
+    );
   }
 
   public static validateName(name: string): boolean {
-    return !!(name && name.length >= 3 && name.length <= 60);
+    return !!(
+      name
+      && typeof name === 'string'
+      && name.trim().length >= 3
+      && name.length <= 60
+    );
   }
 
   public static validateEmail(email: string) {
-    return !!(email && email.length >= 3 && email.length <= 255 && email.includes('@'));
+    return !!(
+      email
+      && typeof email === 'string'
+      && email.trim().length >= 3
+      && email.length <= 255 && email.includes('@')
+    );
   }
 
   public static validateUsername(username: string) {
-    return !!(username && username.length >= 3 && username.length <= 60);
+    return !!(
+      username
+      && typeof username === 'string'
+      && username.trim().length >= 3
+      && username.length <= 60
+    );
   }
 
   public static validatePassword(password: string) {
+    if (password && typeof password !== 'string') return false;
+
     const regularExpression = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,36}$/;
-    return !!(password && regularExpression.test(password));
+
+    return (regularExpression.test(password));
   }
 
   public static validateHashPassword(hashPassword: string) {
-    return !!(hashPassword && hashPassword.length > 40);
+    return !!(
+      hashPassword
+      && typeof hashPassword === 'string'
+      && hashPassword.trim().length > 40
+      && hashPassword.length <= 64
+    );
   }
 
   public static validateJwtControlKey(jwtControlKey: string) {
-    return !!(jwtControlKey && jwtControlKey.length === 64);
+    return !!(
+      jwtControlKey
+      && typeof jwtControlKey === 'string'
+      && jwtControlKey.length === 64
+    );
   }
 
   public static validateAvatar(avatar: string) {
-    return !!(avatar && avatar.length > 5);
+    return !!(
+      avatar
+      && typeof avatar === 'string'
+      && avatar.trim().length > 5
+      && avatar.length <= 128
+    );
   }
 
   public static validateRole(role: UserRole) {

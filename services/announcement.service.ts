@@ -3,7 +3,7 @@ import { NotFoundError } from '../utils/errors';
 import { AuctionLinkRepository } from '../repository/auction-link.repository';
 import { CreateAnnouncementRecord } from '../utils/create-record/create-announcement-record';
 import { listAuctionLinks } from '../utils/list-auction-links';
-import { AnnouncementEntityResponse, AnnouncementEntitySimpleResponse, CreateAnnouncementDto } from '../types';
+import { AnnouncementEntityResponse, AnnouncementEntitySimpleResponse, AnnouncementDto } from '../types';
 
 export class AnnouncementService {
   public static async getAnnouncements(search: string): Promise<AnnouncementEntitySimpleResponse[]> {
@@ -30,7 +30,7 @@ export class AnnouncementService {
   }
 
   public static async createAnnouncement(
-    announcementData: CreateAnnouncementDto,
+    announcementData: AnnouncementDto,
     userId: string,
   ): Promise<AnnouncementEntityResponse> {
     const announcement = CreateAnnouncementRecord.createAnnouncementRecord(announcementData, userId);
@@ -49,7 +49,7 @@ export class AnnouncementService {
 
   public static async updateAnnouncement(
     announcementId: string,
-    announcementData: CreateAnnouncementDto,
+    announcementData: AnnouncementDto,
   ): Promise<AnnouncementEntityResponse> {
     const announcement = await AnnouncementRepository.findById(announcementId);
     if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);

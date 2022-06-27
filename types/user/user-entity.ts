@@ -11,5 +11,3 @@ export interface UserEntity {
     avatar: string;
     role: UserRole;
 }
-
-export type UserEntityResponse = Omit<UserEntity, 'password' | 'jwtControlKey'>;

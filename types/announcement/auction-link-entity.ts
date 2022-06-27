@@ -4,8 +4,3 @@ export interface AuctionLinkEntity {
   name: string;
   url: string;
 }
-
-export interface AuctionLinkSave {
-  name: string;
-  url: string;
-}

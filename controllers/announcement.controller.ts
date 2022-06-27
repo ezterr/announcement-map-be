@@ -31,8 +31,10 @@ export class AnnouncementController {
     const { id: userId } = req.user as UserRequest;
 
     try {
-      const newAnnouncement = AnnouncementService.createAnnouncement(req.body, userId);
-      res.json(newAnnouncement);
+      const newAnnouncement = await AnnouncementService.createAnnouncement(req.body, userId);
+      res
+        .status(201)
+        .json(newAnnouncement);
     } catch (err) {
       next(err);
     }
@@ -42,7 +44,7 @@ export class AnnouncementController {
     const { announcementId } = req.params;
 
     try {
-      const updatedAnnouncement = AnnouncementService.updateAnnouncement(announcementId, req.body);
+      const updatedAnnouncement = await AnnouncementService.updateAnnouncement(announcementId, req.body);
       res.json(updatedAnnouncement);
     } catch (err) {
       next(err);

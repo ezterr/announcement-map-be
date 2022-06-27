@@ -1,6 +1,6 @@
 import { CreateAuctionLinkDto } from './create-auction-link.dto';
 
-export interface CreateAnnouncementDto {
+export interface AnnouncementDto {
   title: string;
   description: string;
   price: number;

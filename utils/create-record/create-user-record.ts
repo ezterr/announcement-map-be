@@ -2,12 +2,10 @@ import { v4 as uuid } from 'uuid';
 import { promisify } from 'util';
 import { randomBytes } from 'crypto';
 import { compare, hash } from 'bcrypt';
-import { UserRole } from '../../types';
+import { UserRole, CreateUserDto, UpdateUserDto } from '../../types';
 import { UserRecord } from '../../records/user.record';
 import { UserValidation } from '../validation/user-validation';
 import { AuthError, ValidationError } from '../errors';
-import { UpdateUserDto } from '../../types/dto/update-user.dto';
-import { CreateUserDto } from '../../types/dto/create-user.dto';
 
 export class CreateUserRecord {
   public static async createUserRecord(body: CreateUserDto): Promise<UserRecord> {
@@ -27,10 +25,10 @@ export class CreateUserRecord {
 
     const user = new UserRecord({
       id: uuid(),
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      username: username.trim(),
-      email: email.trim(),
+      firstName,
+      lastName,
+      username,
+      email,
       avatar: 'default',
       password: hashPassword,
       jwtControlKey,
@@ -48,15 +46,15 @@ export class CreateUserRecord {
 
     const user = new UserRecord(oldUser);
 
-    user.firstName = String(firstName).trim() || user.firstName;
-    user.lastName = String(lastName).trim() || user.lastName;
-    user.avatar = String(avatar).trim() || user.avatar;
+    user.firstName = firstName !== undefined ? String(firstName) : user.firstName;
+    user.lastName = lastName !== undefined ? String(lastName) : user.lastName;
+    user.avatar = avatar !== undefined ? String(avatar) : user.avatar;
 
     if (newPassword || email !== user.email) {
       const passwordCompareResult = password ? await compare(password, user.password as string) : false;
 
       if (passwordCompareResult) {
-        user.email = String(email).trim() || user.email;
+        user.email = email !== undefined ? String(email) : user.email;
 
         if (newPassword) {
           if (UserValidation.validatePassword(newPassword)) {

@@ -25,7 +25,7 @@ export class AuctionLinkRecord implements AuctionLinkEntity {
     }
 
     if (!AuctionLinkValidation.nameValidate(this.name)) {
-      throw new ValidationError(`invalid url of ${this.id}`, `invalid name: ${this.name}`);
+      throw new ValidationError(`invalid auction name: ${this.name}`, `invalid auction name: ${this.name}`);
     }
 
     if (!AuctionLinkValidation.urlValidate(this.url)) {
