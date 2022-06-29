@@ -29,4 +29,18 @@ export interface AnnouncementEntitySimpleResponse {
   lon: number;
 }
 
-export type AnnouncementEntityResponse = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
+interface AnnouncementEntityResponse extends Omit<AnnouncementEntity, 'createdAt'> {
+  createdAt: string;
+}
+
+export type GetUserAnnouncementsResponse = AnnouncementEntityResponse[];
+export type GetAnnouncementsResponse = AnnouncementEntitySimpleResponse[];
+export type GetAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
+export type CreateAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
+export type UpdateAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
+
+export type GetUserAnnouncements = AnnouncementEntity[];
+export type GetAnnouncements = AnnouncementEntitySimpleResponse[];
+export type GetAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
+export type CreateAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
+export type UpdateAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};

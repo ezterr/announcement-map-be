@@ -18,7 +18,17 @@ export class AnnouncementRepository {
     return result.affectedRows > 0 ? announcement : null;
   }
 
-  public static async findAll(search: string = ''): Promise<AnnouncementRecord[]> {
+  public static async findAll(search: string = '', categoryId: string = ''): Promise<AnnouncementRecord[]> {
+    if (categoryId) {
+      const [result] = await pool.execute('SELECT * FROM `announcement` '
+        + 'WHERE `title` LIKE :search AND `categoryId`=:categoryId;', {
+        search: `%${search}%`,
+        categoryId,
+      }) as ResultAnnouncementEntity;
+
+      return result.length > 0 ? result.map((e) => new AnnouncementRecord(e)) : [];
+    }
+
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `title` LIKE :search;', {
       search: `%${search}%`,
     }) as ResultAnnouncementEntity;
@@ -32,6 +42,14 @@ export class AnnouncementRepository {
     }) as ResultAnnouncementEntity;
 
     return result.length > 0 ? new AnnouncementRecord(result[0]) : null;
+  }
+
+  public static async findAnnouncementByAuthorId(id: string): Promise<AnnouncementRecord[]> {
+    const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `createdBy`=:id;', {
+      id,
+    }) as ResultAnnouncementEntity;
+
+    return result.length > 0 ? result.map((e) => new AnnouncementRecord(e)) : [];
   }
 
   public static async findAuthorByAnnouncementId(id: string): Promise<string | null> {

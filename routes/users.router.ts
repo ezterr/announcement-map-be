@@ -12,3 +12,6 @@ usersRouter.route('/:userId')
   .get(authJwt, checkUserRoutesAccess, UserController.getUser)
   .patch(authJwt, checkUserRoutesAccess, UserController.updateUser)
   .delete(authJwt, checkUserRoutesAccess, UserController.deleteUser);
+
+usersRouter.route('/:userId/announcement')
+  .get(authJwt, UserController.getUserAnnouncements);

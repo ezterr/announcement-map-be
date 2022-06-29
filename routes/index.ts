@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authRouter } from './auth.router';
 import { usersRouter } from './users.router';
 import { announcementRouter } from './announcement.router';
-import { apiRateLimit } from '../utils/rate-limiter';
+import { apiRateLimit } from '../middleware/rate-limiter';
 import { categoryRouter } from './category.router';
 
 export const router = Router();

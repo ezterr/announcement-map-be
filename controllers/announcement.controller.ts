@@ -4,10 +4,13 @@ import { UserRequest } from '../types';
 
 export class AnnouncementController {
   public static async getAnnouncements(req: Request, res: Response, next: NextFunction) {
-    const { search } = req.query;
+    const { search, category } = req.query;
 
     try {
-      const announcements = await AnnouncementService.getAnnouncements(search as string || '');
+      const announcements = await AnnouncementService.getAnnouncements(
+        search as string || '',
+        category as string || '',
+      );
 
       res.json(announcements);
     } catch (err) {

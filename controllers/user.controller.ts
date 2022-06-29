@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.service';
+import { AnnouncementService } from '../services/announcement.service';
 
 export class UserController {
   public static async getUsers(req: Request, res: Response, next: NextFunction) {
@@ -56,6 +57,17 @@ export class UserController {
       const deleteResult = await UserService.deleteUser(userId);
 
       res.json({ id: deleteResult });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async getUserAnnouncements(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req.params;
+    try {
+      const userAnnouncements = await AnnouncementService.getAnnouncementByUserId(userId);
+
+      res.json(userAnnouncements);
     } catch (err) {
       next(err);
     }

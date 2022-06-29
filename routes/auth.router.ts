@@ -3,7 +3,7 @@ import { AuthController } from '../controllers/auth.controller';
 import { authJwt, authLogin, checkRefreshToken } from '../middleware/auth';
 import {
   apiRateLimit, getTokenRateLimit, signInRateLimit,
-} from '../utils/rate-limiter';
+} from '../middleware/rate-limiter';
 
 export const authRouter = Router();
 

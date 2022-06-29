@@ -8,10 +8,10 @@ import { UserValidation } from '../validation/user-validation';
 import { AuthError, ValidationError } from '../errors';
 
 export class CreateUserRecord {
-  public static async createUserRecord(body: CreateUserDto): Promise<UserRecord> {
+  public static async createUserRecord(userData: CreateUserDto): Promise<UserRecord> {
     const {
       firstName, lastName, username, email, password,
-    } = body;
+    } = userData;
 
     if (!UserValidation.validatePassword(password)) {
       throw new ValidationError(
@@ -39,10 +39,10 @@ export class CreateUserRecord {
     return user;
   }
 
-  public static async updateUserRecord(body: UpdateUserDto, oldUser: UserRecord): Promise<UserRecord> {
+  public static async updateUserRecord(userData: UpdateUserDto, oldUser: UserRecord): Promise<UserRecord> {
     const {
       firstName, lastName, email, newPassword, password, avatar,
-    } = body;
+    } = userData;
 
     const user = new UserRecord(oldUser);
 

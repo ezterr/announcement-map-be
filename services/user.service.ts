@@ -1,10 +1,16 @@
 import { UserRepository } from '../repository/user.repository';
 import { NotFoundError, ValidationError } from '../utils/errors';
 import { CreateUserRecord } from '../utils/create-record/create-user-record';
-import { UpdateUserDto, UserEntityResponse, CreateUserDto } from '../types';
+import {
+  UpdateUserDto,
+  CreateUserDto,
+  UpdateUserResponse,
+  GetUsersResponse,
+  GetUserResponse, CreateUserResponse,
+} from '../types';
 
 export class UserService {
-  public static async getUsers(offset: number, count: number): Promise<UserEntityResponse[]> {
+  public static async getUsers(offset: number, count: number): Promise<GetUsersResponse> {
     const users = await UserRepository.findAll(offset, count);
 
     return users.map((e) => {
@@ -13,7 +19,7 @@ export class UserService {
     });
   }
 
-  public static async getUser(id: string): Promise<UserEntityResponse> {
+  public static async getUser(id: string): Promise<GetUserResponse> {
     const user = await UserRepository.findOneById(id);
     if (user === null) throw new NotFoundError(`Not Found user with id: ${id}`);
 
@@ -22,7 +28,7 @@ export class UserService {
     return userEntityRes;
   }
 
-  public static async createUser(body: CreateUserDto): Promise<UserEntityResponse> {
+  public static async createUser(body: CreateUserDto): Promise<CreateUserResponse> {
     const isEmailUniqueness = await UserRepository.checkEmailUniqueness(body.email);
     const isUsernameUniqueness = await UserRepository.checkUsernameUniqueness(body.username);
 
@@ -44,7 +50,7 @@ export class UserService {
     return userEntityRes;
   }
 
-  public static async updateUser(id: string, body: UpdateUserDto): Promise<UserEntityResponse> {
+  public static async updateUser(id: string, body: UpdateUserDto): Promise<UpdateUserResponse> {
     const user = await UserRepository.findOneById(id);
     if (user === null) throw new NotFoundError(`Not Found user with id: ${id}`);
 

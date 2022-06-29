@@ -3,11 +3,19 @@ import { NotFoundError } from '../utils/errors';
 import { AuctionLinkRepository } from '../repository/auction-link.repository';
 import { CreateAnnouncementRecord } from '../utils/create-record/create-announcement-record';
 import { listAuctionLinks } from '../utils/list-auction-links';
-import { AnnouncementEntityResponse, AnnouncementEntitySimpleResponse, AnnouncementDto } from '../types';
+import {
+  AnnouncementEntitySimpleResponse,
+  AnnouncementDto,
+  GetAnnouncements,
+  GetAnnouncement,
+  GetUserAnnouncements,
+  CreateAnnouncement,
+  UpdateAnnouncement,
+} from '../types';
 
 export class AnnouncementService {
-  public static async getAnnouncements(search: string): Promise<AnnouncementEntitySimpleResponse[]> {
-    const announcements = await AnnouncementRepository.findAll(search);
+  public static async getAnnouncements(search: string, categoryId: string): Promise<GetAnnouncements> {
+    const announcements = await AnnouncementRepository.findAll(search, categoryId);
 
     return announcements.map((e): AnnouncementEntitySimpleResponse => ({
       id: e.id,
@@ -17,7 +25,7 @@ export class AnnouncementService {
   }
 
   public static async getAnnouncement(id: string):
-    Promise<AnnouncementEntityResponse> {
+    Promise<GetAnnouncement> {
     const announcement = await AnnouncementRepository.findById(id);
     if (!announcement) throw new NotFoundError(`Not found announcement with id: ${id}`);
 
@@ -29,10 +37,14 @@ export class AnnouncementService {
     };
   }
 
+  public static async getAnnouncementByUserId(id: string): Promise<GetUserAnnouncements> {
+    return AnnouncementRepository.findAnnouncementByAuthorId(id);
+  }
+
   public static async createAnnouncement(
     announcementData: AnnouncementDto,
     userId: string,
-  ): Promise<AnnouncementEntityResponse> {
+  ): Promise<CreateAnnouncement> {
     const announcement = CreateAnnouncementRecord.createAnnouncementRecord(announcementData, userId);
     const auctionLinkRecords = listAuctionLinks(announcementData.auctionLinks, announcement.id);
 
@@ -50,7 +62,7 @@ export class AnnouncementService {
   public static async updateAnnouncement(
     announcementId: string,
     announcementData: AnnouncementDto,
-  ): Promise<AnnouncementEntityResponse> {
+  ): Promise<UpdateAnnouncement> {
     const announcement = await AnnouncementRepository.findById(announcementId);
     if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
 

@@ -3,10 +3,10 @@ import { AnnouncementRecord } from '../../records/announcement.record';
 import { AnnouncementDto } from '../../types';
 
 export class CreateAnnouncementRecord {
-  public static createAnnouncementRecord(body: AnnouncementDto, userId: string): AnnouncementRecord {
+  public static createAnnouncementRecord(announcementData: AnnouncementDto, userId: string): AnnouncementRecord {
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
-    } = body;
+    } = announcementData;
 
     const announcement = new AnnouncementRecord({
       id: uuid(),
@@ -31,11 +31,11 @@ export class CreateAnnouncementRecord {
     return announcement;
   }
 
-  public static updateAnnouncementRecord(body: AnnouncementDto, oldAnnouncement: AnnouncementRecord):
+  public static updateAnnouncementRecord(announcementData: AnnouncementDto, oldAnnouncement: AnnouncementRecord):
     AnnouncementRecord {
     const {
       title, description, price, categoryId, lat, lon, country, city, zipCode, street, buildingNumber, apartamentNumber,
-    } = body;
+    } = announcementData;
 
     const announcement = new AnnouncementRecord(oldAnnouncement);
 

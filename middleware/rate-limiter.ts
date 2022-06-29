@@ -11,7 +11,7 @@ export const apiRateLimit = rateLimit({
 
 export const signInRateLimit = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 50,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'To many request' },
@@ -19,7 +19,7 @@ export const signInRateLimit = rateLimit({
 
 export const signupRateLimit = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 5,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'To many request' },
