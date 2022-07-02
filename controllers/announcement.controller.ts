@@ -60,7 +60,7 @@ export class AnnouncementController {
     try {
       const deleteResult = await AnnouncementService.deleteAnnouncement(announcementId);
 
-      res.json({ id: deleteResult });
+      res.json(deleteResult);
     } catch (err) {
       next(err);
     }

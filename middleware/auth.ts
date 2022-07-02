@@ -57,6 +57,7 @@ export async function checkAnnouncementAccess(req: Request, res: Response, next:
   try {
     const authorId = await AnnouncementRepository.findAuthorByAnnouncementId(announcementIdParam);
 
+    console.log(authorId);
     if (authorId === userId || userRole === UserRole.Admin) {
       next();
       return;

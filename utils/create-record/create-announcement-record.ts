@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { AnnouncementRecord } from '../../records/announcement.record';
 import { AnnouncementDto } from '../../types';
+import { DataConversion } from '../data-conversion';
 
 export class CreateAnnouncementRecord {
   public static createAnnouncementRecord(announcementData: AnnouncementDto, userId: string): AnnouncementRecord {
@@ -44,13 +45,19 @@ export class CreateAnnouncementRecord {
     announcement.price = price !== undefined ? Number(price) : announcement.price;
     announcement.lat = lat !== undefined ? Number(lat) : announcement.lat;
     announcement.lon = lon !== undefined ? Number(lon) : announcement.lon;
+    announcement.categoryId = categoryId !== undefined ? String(categoryId) : announcement.categoryId;
     announcement.country = country !== undefined ? String(country) : announcement.country;
     announcement.city = city !== undefined ? String(city) : announcement.city;
     announcement.zipCode = zipCode !== undefined ? String(zipCode) : announcement.zipCode;
-    announcement.street = street !== undefined ? String(street) : announcement.street;
-    announcement.buildingNumber = buildingNumber !== undefined ? String(buildingNumber) : announcement.buildingNumber;
-    announcement.apartamentNumber = apartamentNumber !== undefined ? String(apartamentNumber) : announcement.apartamentNumber;
-    announcement.categoryId = categoryId !== undefined ? String(categoryId) : announcement.categoryId;
+    announcement.street = street !== undefined
+      ? DataConversion.setNullIfEmptyString(String(street))
+      : announcement.street;
+    announcement.buildingNumber = buildingNumber !== undefined
+      ? DataConversion.setNullIfEmptyString(String(buildingNumber))
+      : announcement.buildingNumber;
+    announcement.apartamentNumber = apartamentNumber !== undefined
+      ? DataConversion.setNullIfEmptyString(String(apartamentNumber))
+      : announcement.apartamentNumber;
     announcement.validate();
 
     return announcement;

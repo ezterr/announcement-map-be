@@ -38,9 +38,11 @@ export type GetAnnouncementsResponse = AnnouncementEntitySimpleResponse[];
 export type GetAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
 export type CreateAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
 export type UpdateAnnouncementResponse = AnnouncementEntityResponse & {auctionLinks: AuctionLinkEntity[]};
+export type DeleteAnnouncementResponse = {id: string};
 
 export type GetUserAnnouncements = AnnouncementEntity[];
 export type GetAnnouncements = AnnouncementEntitySimpleResponse[];
 export type GetAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
 export type CreateAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
 export type UpdateAnnouncement = AnnouncementEntity & {auctionLinks: AuctionLinkEntity[]};
+export type DeleteAnnouncement = {id: string};

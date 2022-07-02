@@ -10,7 +10,7 @@ import {
   GetAnnouncement,
   GetUserAnnouncements,
   CreateAnnouncement,
-  UpdateAnnouncement,
+  UpdateAnnouncement, DeleteAnnouncement,
 } from '../types';
 
 export class AnnouncementService {
@@ -81,13 +81,12 @@ export class AnnouncementService {
     return { ...updateAnnouncementResult, auctionLinks: [...auctionLinkRecords] };
   }
 
-  public static async deleteAnnouncement(announcementId: string): Promise<string> {
+  public static async deleteAnnouncement(announcementId: string): Promise<DeleteAnnouncement> {
     const deleteResult = await AnnouncementRepository.deleteById(announcementId);
     if (!deleteResult) throw new Error('Announcement has not been deleted');
 
     const deleteLinksResult = await AuctionLinkRepository.deleteByAnnouncementId(announcementId);
-    if (!deleteLinksResult) throw new Error('Auction links has not been deleted');
 
-    return announcementId;
+    return { id: announcementId };
   }
 }
