@@ -88,4 +88,12 @@ export class AnnouncementRepository {
 
     return result.affectedRows > 0 ? id : null;
   }
+
+  public static async addViewToAnnouncement(id: string): Promise<boolean> {
+    const [result] = await pool.execute('UPDATE `announcement` SET `views`=`views`+1 WHERE `id`=:id', {
+      id,
+    }) as OkPacket[];
+
+    return !!result.changedRows;
+  }
 }

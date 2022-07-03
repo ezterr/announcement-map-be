@@ -17,6 +17,7 @@ export class CreateAnnouncementRecord {
       categoryId,
       createdAt: new Date(),
       createdBy: userId,
+      views: 0,
       lat: Number(lat),
       lon: Number(lon),
       country,

@@ -113,4 +113,13 @@ export class AnnouncementValidation {
       && !Number.isNaN(coordinate)
     );
   }
+
+  public static validateViews(views: number): boolean {
+    return (
+      typeof views === 'number'
+      && views >= 0
+      && views <= 99999999999
+      && !Number.isNaN(views)
+    );
+  }
 }

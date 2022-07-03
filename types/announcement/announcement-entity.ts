@@ -8,6 +8,7 @@ export interface AnnouncementEntity {
   categoryId: string;
   createdAt: Date;
   createdBy: string;
+  views: number;
   lat: number;
   lon: number;
   country: string;

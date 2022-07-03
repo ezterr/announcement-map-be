@@ -10,7 +10,8 @@ import {
   GetAnnouncement,
   GetUserAnnouncements,
   CreateAnnouncement,
-  UpdateAnnouncement, DeleteAnnouncement,
+  UpdateAnnouncement,
+  DeleteAnnouncement,
 } from '../types';
 
 export class AnnouncementService {
@@ -28,6 +29,9 @@ export class AnnouncementService {
     Promise<GetAnnouncement> {
     const announcement = await AnnouncementRepository.findById(id);
     if (!announcement) throw new NotFoundError(`Not found announcement with id: ${id}`);
+
+    const addViewToAnnouncement = await AnnouncementRepository.addViewToAnnouncement(id);
+    if (!addViewToAnnouncement) throw new Error('View has not been added');
 
     const auctionLinks = await AuctionLinkRepository.findByAnnouncementId(id);
 

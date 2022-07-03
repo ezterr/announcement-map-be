@@ -10,6 +10,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
   public categoryId: string;
   public createdAt: Date;
   public createdBy: string;
+  public views: number;
   public lat: number;
   public lon: number;
   public country: string;
@@ -27,6 +28,7 @@ export class AnnouncementRecord implements AnnouncementEntity {
     this.categoryId = announcement.categoryId;
     this.createdAt = announcement.createdAt;
     this.createdBy = announcement.createdBy;
+    this.views = announcement.views;
     this.lat = announcement.lat;
     this.lon = announcement.lon;
     this.country = announcement.country;
@@ -138,6 +140,13 @@ export class AnnouncementRecord implements AnnouncementEntity {
       throw new ValidationError(
         'Apartament number must contain at least 1 characters and less than 20 or null.',
         'Apartament number must contain at least 1 characters and less than 20 or null.',
+      );
+    }
+
+    if (!AnnouncementValidation.validateViews(this.views)) {
+      throw new ValidationError(
+        'Views cannot be lower than 0 and higher than 99999999999 and it must be a number ',
+        'Views cannot be lower than 0 and higher than 99999999999 and it must be a number ',
       );
     }
   }
