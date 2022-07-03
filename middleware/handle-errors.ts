@@ -4,8 +4,11 @@ import {
 } from '../utils/errors';
 
 export async function handleErrors(err: Error, req: Request, res: Response, next: NextFunction) {
-  if (err instanceof AuthError || err instanceof ValidationError || err instanceof NotFoundError
-    || err instanceof ForbiddenError) {
+  if (err instanceof AuthError
+    || err instanceof ValidationError
+    || err instanceof NotFoundError
+    || err instanceof ForbiddenError
+  ) {
     res
       .status(err.status)
       .json({ error: err.userMessage });

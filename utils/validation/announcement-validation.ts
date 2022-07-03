@@ -25,12 +25,11 @@ export class AnnouncementValidation {
     );
   }
 
-  public static validateCategory(category: string): boolean {
+  public static validateCategory(categoryId: string): boolean {
     return !!(
-      category
-      && typeof category === 'string'
-      && category.trim().length >= 3
-      && category.length <= 255
+      categoryId
+      && typeof categoryId === 'string'
+      && categoryId.length === 36
     );
   }
 
@@ -44,11 +43,12 @@ export class AnnouncementValidation {
   }
 
   public static validateDate(date: Date): boolean {
-    return !!(date instanceof Date);
+    return (date instanceof Date);
   }
 
   public static validateCountry(country: string): boolean {
-    return !!(country
+    return !!(
+      country
       && typeof country === 'string'
       && country.trim().length >= 2
       && country.length <= 60
@@ -56,7 +56,8 @@ export class AnnouncementValidation {
   }
 
   public static validateCity(city: string): boolean {
-    return !!(city
+    return !!(
+      city
       && typeof city === 'string'
       && city.trim().length >= 2
       && city.length <= 90
@@ -100,7 +101,7 @@ export class AnnouncementValidation {
     return !!(
       apartamentNumber
       && typeof apartamentNumber === 'string'
-      && apartamentNumber.length >= 1
+      && apartamentNumber.trim().length >= 1
       && apartamentNumber.length <= 20
     );
   }

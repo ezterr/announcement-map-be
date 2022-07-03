@@ -34,6 +34,7 @@ export class CreateUserRecord {
       jwtControlKey,
       role: UserRole.User,
     });
+
     user.validateAllData();
 
     return user;

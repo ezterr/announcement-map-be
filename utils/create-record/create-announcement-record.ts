@@ -41,23 +41,23 @@ export class CreateAnnouncementRecord {
 
     const announcement = new AnnouncementRecord(oldAnnouncement);
 
-    announcement.title = title !== undefined ? String(title) : announcement.title;
-    announcement.description = description !== undefined ? String(description) : announcement.description;
+    announcement.title = title !== undefined ? title : announcement.title;
+    announcement.description = description !== undefined ? description : announcement.description;
     announcement.price = price !== undefined ? Number(price) : announcement.price;
     announcement.lat = lat !== undefined ? Number(lat) : announcement.lat;
     announcement.lon = lon !== undefined ? Number(lon) : announcement.lon;
-    announcement.categoryId = categoryId !== undefined ? String(categoryId) : announcement.categoryId;
-    announcement.country = country !== undefined ? String(country) : announcement.country;
-    announcement.city = city !== undefined ? String(city) : announcement.city;
-    announcement.zipCode = zipCode !== undefined ? String(zipCode) : announcement.zipCode;
+    announcement.categoryId = categoryId !== undefined ? categoryId : announcement.categoryId;
+    announcement.country = country !== undefined ? country : announcement.country;
+    announcement.city = city !== undefined ? city : announcement.city;
+    announcement.zipCode = zipCode !== undefined ? zipCode : announcement.zipCode;
     announcement.street = street !== undefined
-      ? DataConversion.setNullIfEmptyString(String(street))
+      ? DataConversion.setNullIfEmpty(street)
       : announcement.street;
     announcement.buildingNumber = buildingNumber !== undefined
-      ? DataConversion.setNullIfEmptyString(String(buildingNumber))
+      ? DataConversion.setNullIfEmpty(buildingNumber)
       : announcement.buildingNumber;
     announcement.apartamentNumber = apartamentNumber !== undefined
-      ? DataConversion.setNullIfEmptyString(String(apartamentNumber))
+      ? DataConversion.setNullIfEmpty(apartamentNumber)
       : announcement.apartamentNumber;
     announcement.validate();
 

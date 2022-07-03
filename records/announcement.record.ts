@@ -129,13 +129,6 @@ export class AnnouncementRecord implements AnnouncementEntity {
       );
     }
 
-    if (!AnnouncementValidation.validateBuildingNumber(this.buildingNumber)) {
-      throw new ValidationError(
-        'City must contain at least 1 characters and less than 20 or null.',
-        'City must contain at least 1 characters and less than 20 or null.',
-      );
-    }
-
     if (!AnnouncementValidation.validateApartamentNumber(this.apartamentNumber)) {
       throw new ValidationError(
         'Apartament number must contain at least 1 characters and less than 20 or null.',

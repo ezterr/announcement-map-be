@@ -1,6 +1,6 @@
 export class DataConversion {
-  public static setNullIfEmptyString(value: string) {
-    if (value === '') return null;
+  public static setNullIfEmpty(value: any) {
+    if (value === '' || value === undefined) return null;
 
     return value;
   }
