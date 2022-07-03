@@ -48,7 +48,7 @@ export class UserValidation {
     return !!(
       hashPassword
       && typeof hashPassword === 'string'
-      && hashPassword.trim().length > 40
+      && hashPassword.trim().length >= 50
       && hashPassword.length <= 64
     );
   }
@@ -65,7 +65,7 @@ export class UserValidation {
     return !!(
       avatar
       && typeof avatar === 'string'
-      && avatar.trim().length > 5
+      && avatar.trim().length >= 5
       && avatar.length <= 128
     );
   }

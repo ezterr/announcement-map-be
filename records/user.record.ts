@@ -25,7 +25,7 @@ export class UserRecord implements UserEntity {
     this.role = user.role;
   }
 
-  public validateAllData() {
+  public validate() {
     this.validateNotSensitiveData();
     this.validateSensitiveData();
     this.validateVerySensitiveData();

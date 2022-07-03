@@ -35,7 +35,7 @@ export class CreateUserRecord {
       role: UserRole.User,
     });
 
-    user.validateAllData();
+    user.validate();
 
     return user;
   }
@@ -72,7 +72,7 @@ export class CreateUserRecord {
       }
     }
 
-    user.validateAllData();
+    user.validate();
 
     return user;
   }

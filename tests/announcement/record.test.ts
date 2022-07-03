@@ -9,7 +9,7 @@ type validateRule = {
   max: null;
   nullable: boolean;
 } | {
-  key: string;
+  key: keyof AnnouncementRecord;
   equal: null;
   min: number;
   max: number;
