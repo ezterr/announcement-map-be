@@ -50,7 +50,7 @@ test('find by author name', async () => {
 });
 
 test('find by id', async () => {
-  const announcement = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
+  const announcement = await AnnouncementRepository.findOneById('31e3a212-449a-455b-bb92-41fa98a3ea10');
 
   expect(announcement).not.toBeNull();
   expect(announcement?.id).toBe('31e3a212-449a-455b-bb92-41fa98a3ea10');
@@ -63,46 +63,12 @@ test('find author by announcement id', async () => {
   expect(announcement).toBe('6029cccd-3b26-418c-b268-44727340e769');
 });
 
-test('update announcement', async () => {
-  const announcement = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
-  const updatedData = new AnnouncementRecord({ ...announcement as AnnouncementRecord });
-
-  updatedData.title = 'Zabawki dla dzieci update';
-  updatedData.price = 1234;
-
-  const repositoryResult = await AnnouncementRepository.updateById(updatedData);
-
-  expect(updatedData).not.toBeNull();
-  expect(updatedData).not.toEqual(announcement);
-  expect(updatedData).toEqual(repositoryResult);
-
-  await AnnouncementRepository.updateById(announcement as AnnouncementRecord);
-});
-
-test('remove announcement', async () => {
-  const announcement = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
-  const auctionLinks = await AuctionLinkRepository.findByAnnouncementId('31e3a212-449a-455b-bb92-41fa98a3ea10');
-
-  const removeResult = await AnnouncementRepository.deleteById('31e3a212-449a-455b-bb92-41fa98a3ea10');
-
-  const testFind = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
-
-  expect(removeResult).not.toBeNull();
-  expect(removeResult).toBe('31e3a212-449a-455b-bb92-41fa98a3ea10');
-  expect(testFind).toBeNull();
-
-  await AnnouncementRepository.insert(announcement as AnnouncementRecord);
-  for await (const auctionLinkRecord of auctionLinks) {
-    const insertAuctionLinkResult = await AuctionLinkRepository.insert(new AuctionLinkRecord(auctionLinkRecord));
-  }
-});
-
 test('add view to announcement', async () => {
-  const announcement = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
+  const announcement = await AnnouncementRepository.findOneById('31e3a212-449a-455b-bb92-41fa98a3ea10');
 
   const addviewToAnnouncement = await AnnouncementRepository.addViewToAnnouncement('31e3a212-449a-455b-bb92-41fa98a3ea10');
 
-  const announcementWithNewViews = await AnnouncementRepository.findById('31e3a212-449a-455b-bb92-41fa98a3ea10');
+  const announcementWithNewViews = await AnnouncementRepository.findOneById('31e3a212-449a-455b-bb92-41fa98a3ea10');
 
   expect(addviewToAnnouncement).toBe(true);
   expect((announcement as AnnouncementRecord).views + 1).toBe((announcementWithNewViews as AnnouncementRecord)?.views);

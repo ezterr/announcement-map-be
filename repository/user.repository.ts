@@ -75,7 +75,6 @@ export class UserRepository {
       'SELECT `email` FROM `users` WHERE `email`=:email;',
       { email },
     ) as DbEmailCheckResult;
-    console.log(result, email);
     return !(result.length);
   }
 

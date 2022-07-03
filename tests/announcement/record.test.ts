@@ -176,7 +176,6 @@ test('validate numbers', () => {
 test('validate date', () => {
   announcementRecord.createdAt = new Date();
   expect(() => announcementRecord.validate()).not.toThrow(Error);
-  console.log(new Date() instanceof Date);
 
   announcementRecord.createdAt = 123 as any;
   expect(() => announcementRecord.validate()).toThrow(Error);

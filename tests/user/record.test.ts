@@ -62,7 +62,6 @@ test('validate string', () => {
 
       (userRecord as any)[e.key] = String('a').repeat(e.min);
       expect(() => userRecord.validate()).not.toThrow(ValidationError);
-      console.log(userRecord);
 
       (userRecord as any)[e.key] = String(' ').repeat(e.min);
       expect(() => userRecord.validate()).toThrow(ValidationError);

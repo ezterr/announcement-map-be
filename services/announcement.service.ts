@@ -27,7 +27,7 @@ export class AnnouncementService {
 
   public static async getAnnouncement(id: string):
     Promise<GetAnnouncement> {
-    const announcement = await AnnouncementRepository.findById(id);
+    const announcement = await AnnouncementRepository.findOneById(id);
     if (!announcement) throw new NotFoundError(`Not found announcement with id: ${id}`);
 
     const addViewToAnnouncement = await AnnouncementRepository.addViewToAnnouncement(id);
@@ -67,7 +67,7 @@ export class AnnouncementService {
     announcementId: string,
     announcementData: AnnouncementDto,
   ): Promise<UpdateAnnouncement> {
-    const announcement = await AnnouncementRepository.findById(announcementId);
+    const announcement = await AnnouncementRepository.findOneById(announcementId);
     if (!announcement) throw new NotFoundError(`Not found user with id: ${announcementId}`);
 
     const newAnnouncement = CreateAnnouncementRecord.updateAnnouncementRecord(announcementData, announcement);
