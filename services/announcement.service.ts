@@ -42,7 +42,7 @@ export class AnnouncementService {
   }
 
   public static async getAnnouncementByUserId(id: string): Promise<GetUserAnnouncements> {
-    return AnnouncementRepository.findAnnouncementByAuthorId(id);
+    return AnnouncementRepository.findAnnouncementsByAuthorId(id);
   }
 
   public static async createAnnouncement(

@@ -95,7 +95,6 @@ test('validate string', () => {
 
       (announcementRecord as any)[e.key] = String('a').repeat(e.min);
       expect(() => announcementRecord.validate()).not.toThrow(ValidationError);
-      console.log(announcementRecord);
 
       (announcementRecord as any)[e.key] = String(' ').repeat(e.min);
       expect(() => announcementRecord.validate()).toThrow(ValidationError);

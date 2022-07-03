@@ -44,7 +44,7 @@ export class AnnouncementRepository {
     return result.length > 0 ? new AnnouncementRecord(result[0]) : null;
   }
 
-  public static async findAnnouncementByAuthorId(id: string): Promise<AnnouncementRecord[]> {
+  public static async findAnnouncementsByAuthorId(id: string): Promise<AnnouncementRecord[]> {
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `createdBy`=:id;', {
       id,
     }) as ResultAnnouncementEntity;
