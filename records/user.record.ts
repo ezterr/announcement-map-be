@@ -1,5 +1,5 @@
 import { UserRole, UserEntity } from '../types';
-import { UserValidation } from '../utils/user-validation';
+import { UserValidation } from '../utils/validation/user-validation';
 import { ValidationError } from '../utils/errors';
 
 export class UserRecord implements UserEntity {
@@ -33,26 +33,26 @@ export class UserRecord implements UserEntity {
 
   private validateNotSensitiveData() {
     if (!UserValidation.validateId(this.id)) {
-      throw new ValidationError(`Incorrect id. Id: ${this.id} Id: ${this.username}`);
+      throw new ValidationError(`Incorrect id. Id: ${this.id}, username: ${this.username}`);
     }
 
     if (!UserValidation.validateName(this.firstName)) {
       throw new ValidationError(
-        'first name must contain at least 4 characters',
-        'first name must contain at least 4 characters',
+        'First name must contain at least 4 characters.',
+        'First name must contain at least 4 characters.',
       );
     }
     if (!UserValidation.validateName(this.lastName)) {
       throw new ValidationError(
-        'last name must contain at least 4 characters',
-        'last name must contain at least 4 characters',
+        'Last name must contain at least 4 characters.',
+        'Last name must contain at least 4 characters.',
       );
     }
 
     if (!UserValidation.validateUsername(this.username)) {
       throw new ValidationError(
-        'Username must contain at least 4 characters',
-        'Username must contain at least 4 characters',
+        'Username must contain at least 4 characters.',
+        'Username must contain at least 4 characters.',
       );
     }
 

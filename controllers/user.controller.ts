@@ -1,20 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import { hash, compare } from 'bcrypt';
-import { UserRepository } from '../repository/user.repository';
-import { AuthError, NotFoundError, ValidationError } from '../utils/errors';
-import { UserValidation } from '../utils/user-validation';
-import { UserEntityRes, UserUpdateEntity } from '../types';
+import { UserService } from '../services/user.service';
+import { AnnouncementService } from '../services/announcement.service';
 
 export class UserController {
-  public static async getAllUsers(req: Request, res: Response, next: NextFunction) {
+  public static async getUsers(req: Request, res: Response, next: NextFunction) {
     const offset: number | undefined = Number(req.query?.offset !== undefined ? req.query.offset : 0);
     const count: number | undefined = Number(req.query?.count !== undefined ? req.query.count : 100);
 
     try {
-      const users = (await UserRepository.findAll(offset, count)).map((e): UserEntityRes => {
-        const { password, jwtControlKey, ...userEntityRes } = e;
-        return userEntityRes;
-      });
+      const users = UserService.getUsers(offset, count);
 
       res.json(users);
     } catch (err) {
@@ -22,74 +16,58 @@ export class UserController {
     }
   }
 
-  public static async getUserById(req: Request, res: Response, next: NextFunction) {
+  public static async getUser(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req.params;
+
     try {
-      const user = await UserRepository.findOneById(req.params.userId);
+      const user = await UserService.getUser(userId);
 
-      if (user === null) throw new NotFoundError('Not Found');
-
-      const { password, jwtControlKey, ...userEntityRes } = user;
-
-      res.json(userEntityRes);
+      res.json(user);
     } catch (err) {
       next(err);
     }
   }
 
-  public static async updateUserById(req: Request, res: Response, next: NextFunction) {
-    const {
-      firstName, lastName, email, newPassword, password, avatar,
-    } = req.body as UserUpdateEntity;
-
+  static async createUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await UserRepository.findOneById(req.params.userId);
-      if (user === null) throw new NotFoundError('Not Found');
+      const createdUser = UserService.createUser(req.body);
 
-      user.firstName = firstName || user.firstName;
-      user.lastName = lastName || user.lastName;
-      user.avatar = avatar || user.avatar;
-
-      if (newPassword || email !== user.email) {
-        const passwordCompareResult = password ? await compare(password, user.password as string) : false;
-
-        if (passwordCompareResult) {
-          user.email = email || user.email;
-
-          if (newPassword) {
-            if (UserValidation.validatePassword(newPassword)) {
-              user.password = await hash(newPassword as string, 12);
-            } else {
-              throw new ValidationError(
-                'password must contain eight characters, at least one letter and one number',
-                'password must contain eight characters, at least one letter and one number',
-              );
-            }
-          }
-        } else {
-          throw new AuthError('Unauthorized', 'Unauthorized');
-        }
-      }
-
-      user.validateAllData();
-      const result = await UserRepository.update(user);
-
-      if (result) {
-        const { password: hashPassword, jwtControlKey, ...userEntityRes } = user;
-        res.json(userEntityRes);
-      } else {
-        throw new Error('Internal server error');
-      }
+      res.status(201).json(createdUser);
     } catch (err) {
       next(err);
     }
   }
 
-  public static async deleteUserById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const removedUserId = await UserRepository.deleteById(req.params.userId);
-      if (!removedUserId) throw new ValidationError('Invalid user id');
+  public static async updateUser(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req.params;
 
-      res.send({ removedUserId });
+    try {
+      const updatedUser = await UserService.updateUser(userId, req.body);
+
+      res.json(updatedUser);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async deleteUser(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req.params;
+
+    try {
+      const deleteResult = await UserService.deleteUser(userId);
+
+      res.json({ id: deleteResult });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public static async getUserAnnouncements(req: Request, res: Response, next: NextFunction) {
+    const { userId } = req.params;
+    try {
+      const userAnnouncements = await AnnouncementService.getAnnouncementByUserId(userId);
+
+      res.json(userAnnouncements);
     } catch (err) {
       next(err);
     }
