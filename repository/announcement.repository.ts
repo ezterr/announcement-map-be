@@ -36,7 +36,7 @@ export class AnnouncementRepository {
     return result.length > 0 ? result.map((e) => new AnnouncementRecord(e)) : [];
   }
 
-  public static async findById(id: string): Promise<AnnouncementRecord | null> {
+  public static async findOneById(id: string): Promise<AnnouncementRecord | null> {
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `id`=:id;', {
       id,
     }) as ResultAnnouncementEntity;

@@ -27,7 +27,9 @@ export class AuctionLinkRepository {
   }
 
   public static async deleteByAnnouncementId(announcementId: string): Promise<string | null> {
-    const [result] = await pool.execute('DELETE FROM `auction_links` WHERE `announcementId`=:announcementId', { announcementId }) as ResultSetHeader[];
+    const [result] = await pool.execute('DELETE FROM `auction_links` WHERE `announcementId`=:announcementId', {
+      announcementId,
+    }) as ResultSetHeader[];
 
     return result.affectedRows > 0 ? announcementId : null;
   }
