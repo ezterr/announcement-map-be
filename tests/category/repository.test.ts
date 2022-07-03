@@ -1,4 +1,3 @@
-import { AuctionLinkRepository } from '../../repository/auction-link.repository';
 import { pool } from '../../utils/db';
 import { CategoryRepository } from '../../repository/category.repository';
 
