@@ -36,7 +36,7 @@ export class AnnouncementRepository {
     return result.length > 0 ? result.map((e) => new AnnouncementRecord(e)) : [];
   }
 
-  public static async findById(id: string): Promise<AnnouncementRecord | null> {
+  public static async findOneById(id: string): Promise<AnnouncementRecord | null> {
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `id`=:id;', {
       id,
     }) as ResultAnnouncementEntity;
@@ -44,7 +44,7 @@ export class AnnouncementRepository {
     return result.length > 0 ? new AnnouncementRecord(result[0]) : null;
   }
 
-  public static async findAnnouncementByAuthorId(id: string): Promise<AnnouncementRecord[]> {
+  public static async findAnnouncementsByAuthorId(id: string): Promise<AnnouncementRecord[]> {
     const [result] = await pool.execute('SELECT * FROM `announcement` WHERE `createdBy`=:id;', {
       id,
     }) as ResultAnnouncementEntity;

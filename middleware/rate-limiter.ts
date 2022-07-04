@@ -1,7 +1,7 @@
 import rateLimit from 'express-rate-limit';
 
 export const apiRateLimit = rateLimit({
-  windowMs: 1 * 60 * 1000,
+  windowMs: 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
@@ -10,24 +10,24 @@ export const apiRateLimit = rateLimit({
 });
 
 export const signInRateLimit = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
+  windowMs: 60 * 1000,
+  max: 10,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'To many request' },
 });
 
 export const signupRateLimit = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 100,
+  windowMs: 60 * 1000,
+  max: 10,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'To many request' },
 });
 
 export const getTokenRateLimit = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 6,
+  windowMs: 60 * 1000,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'To many request' },

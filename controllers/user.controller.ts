@@ -30,7 +30,7 @@ export class UserController {
 
   static async createUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const createdUser = UserService.createUser(req.body);
+      const createdUser = await UserService.createUser(req.body);
 
       res.status(201).json(createdUser);
     } catch (err) {

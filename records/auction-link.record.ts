@@ -17,11 +17,11 @@ export class AuctionLinkRecord implements AuctionLinkEntity {
 
   public validate() {
     if (!AuctionLinkValidation.validateId(this.id)) {
-      throw new Error(`Invalid link id: ${this.id}`);
+      throw new ValidationError(`Invalid link id: ${this.id}`);
     }
 
     if (!AuctionLinkValidation.validateId(this.announcementId)) {
-      throw new Error(`Invalid announcement id: ${this.id}`);
+      throw new ValidationError(`Invalid announcement id: ${this.id}`);
     }
 
     if (!AuctionLinkValidation.nameValidate(this.name)) {
