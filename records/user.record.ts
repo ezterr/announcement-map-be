@@ -38,14 +38,14 @@ export class UserRecord implements UserEntity {
 
     if (!UserValidation.validateName(this.firstName)) {
       throw new ValidationError(
-        'First name must contain at least 4 characters.',
-        'First name must contain at least 4 characters.',
+        'First name must contain at least 3 characters.',
+        'First name must contain at least 3 characters.',
       );
     }
     if (!UserValidation.validateName(this.lastName)) {
       throw new ValidationError(
-        'Last name must contain at least 4 characters.',
-        'Last name must contain at least 4 characters.',
+        'Last name must contain at least 3 characters.',
+        'Last name must contain at least 3 characters.',
       );
     }
 
