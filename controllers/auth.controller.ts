@@ -10,7 +10,7 @@ export class AuthController {
       const { token, refreshToken } = AuthService.signIn(id, role, jwtControlKey);
 
       res
-        .cookie('refreshJwt', refreshToken, { httpOnly: true, secure: false })
+        .cookie('refreshJwt', refreshToken, { httpOnly: true, secure: true })
         .json({ token });
     } catch (err) {
       next(err);

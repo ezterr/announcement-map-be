@@ -4,11 +4,12 @@ import cookieParser from 'cookie-parser';
 import { handleErrors } from './middleware/handle-errors';
 import { router } from './routes';
 import { passportConfig } from './utils/passport/passport-config';
+import { config } from './config/config';
 
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: config.corsOrigin,
   credentials: true,
 }));
 app.set('trust proxy', 1);

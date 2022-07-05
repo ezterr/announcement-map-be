@@ -7,4 +7,5 @@ export const config = {
   jwtRefreshSecret: 'refresh secret',
   jwtAuthTime: '10min',
   jwtAuthRefreshTime: 1000,
+  corsOrigin: 'url',
 };
