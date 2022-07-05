@@ -2,14 +2,14 @@ import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 import { randomBytes } from 'crypto';
 import { UserRole } from '../types';
-import { AUTH_TIME, JWT_SECRET, JWT_REFRESH_SECRET } from '../config/secret';
 import { UserRepository } from '../repository/user.repository';
 import { NotFoundError } from '../utils/errors';
+import { config } from '../config/config';
 
 export class AuthService {
   public static signIn(id: string, role: UserRole, key: string) {
-    const token = jwt.sign({ id, role }, JWT_SECRET, { expiresIn: AUTH_TIME });
-    const refreshToken = jwt.sign({ id, key, role }, JWT_REFRESH_SECRET);
+    const token = jwt.sign({ id, role }, config.jwtSecret, { expiresIn: config.jwtAuthTime });
+    const refreshToken = jwt.sign({ id, key, role }, config.jwtRefreshSecret);
 
     return {
       token,
@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   public static getAccessToken(id: string, role: UserRole) {
-    return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: AUTH_TIME });
+    return jwt.sign({ id, role }, config.jwtSecret, { expiresIn: config.jwtAuthTime });
   }
 
   public static async logoutAll(id: string) {
