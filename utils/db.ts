@@ -1,4 +1,10 @@
 import { createPool } from 'mysql2/promise';
-import { dbConfig } from '../config/db.config';
+import { config } from '../config/config';
 
-export const pool = createPool(dbConfig);
+export const pool = createPool({
+  host: config.dbHost,
+  user: config.dbUser,
+  password: config.dbPassword,
+  database: config.dbDatabase,
+  namedPlaceholders: true,
+});

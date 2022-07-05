@@ -2,8 +2,8 @@ import passport from 'passport';
 import localStrategy from 'passport-local';
 import passportJWT from 'passport-jwt';
 import { PassportStrategy } from './passport-strategy';
-import { JWT_SECRET, JWT_REFRESH_SECRET } from '../../config/secret';
 import { PassportExtractors } from './passport-extractors';
+import { config } from '../../config/config';
 
 const LocalStrategy = localStrategy.Strategy;
 const JWTStrategy = passportJWT.Strategy;
@@ -11,12 +11,12 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 const configJwt = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: JWT_SECRET,
+  secretOrKey: config.jwtSecret,
 };
 
 const configRefreshJwt = {
   jwtFromRequest: PassportExtractors.cookieExtractor,
-  secretOrKey: JWT_REFRESH_SECRET,
+  secretOrKey: config.jwtRefreshSecret,
 };
 
 export const passportConfig = () => {
